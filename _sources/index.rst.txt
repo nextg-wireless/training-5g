@@ -458,12 +458,38 @@ For more information on Docker, see the `Background on Docker, Kubernetes & Helm
 
 The E2 interface is based on the O-RAN Alliance's specifications.
 Messages are encoded through the ASN.1 standard, which allows messages to be encoded in binary according to a specification file.
-ASN.1 encoding and decoding is implemented for many programming languages, allowing E2 and xApp specifications to be language-agnostic.
+ASN.1 encoding and decoding is implemented for many programming languages, allowing E2 and xApp specifications to be theoretically language-agnostic.
 
 xApps can define the contents of the data that they send and receive by writing an ASN.1 specification.
 We refer to an xApp's message specification as a `service model`.
-For example, this is the KPM v2.01 ASN.1 specification, which allows the RAN to send key performance metrics to an xApp,
-such as the bitrate and error rate for each user.
+
+Below is an excerpt of example ASN.1 syntax:
+
+.. code-block:: rst
+
+    Metrics ::= SEQUENCE {
+        MCS INTEGER (0.. 28, ...) OPTIONAL,
+        bitrateMbps INTEGER (0.. 65535, ...) OPTIONAL,
+        ...
+    }
+
+    DownlinkMetrics ::= SEQUENCE {
+        CQI INTEGER (0.. 15, ...) OPTIONAL,
+        metrics Metrics,
+        ...
+    }
+
+    IndicationMessage ::= SEQUENCE {
+        Payload DownlinkMetrics
+    }
+
+The O-RAN specifications are available on the O-RAN Alliance's website: https://specifications.o-ran.org/specifications
+Some examples of E2 service models which are standardized by the O-RAN Alliance include:
+
+* E2SM-KPM, which allows the RAN to send key performance metrics to an xApp,
+such as the bitrate and error rate for each user
+* E2SM Cell Configuration and Control, which allows an xApp to control the RAN at the node and cell levels
+* E2SM RAN control, which allows an xApp to control the RAN at the UE and cell levels
 
 xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
 xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.
