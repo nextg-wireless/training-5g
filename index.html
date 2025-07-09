@@ -1,0 +1,811 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session 2 - OAI Installation &mdash; O-RAN 5G Training 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            O-RAN 5G Training
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Session 2 - OAI Installation</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#install-dependencies">Install Dependencies</a><ul>
+<li><a class="reference internal" href="#install-swig-4-1">Install Swig 4.1</a></li>
+<li><a class="reference internal" href="#check-gcc-version-gcc-10-gcc-12-or-gcc-13">Check GCC Version (gcc-10, gcc-12, or gcc-13)</a></li>
+<li><a class="reference internal" href="#install-docker-compose">Install Docker Compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup">Setup</a><ul>
+<li><a class="reference internal" href="#setup-oai-5g-core-network">Setup OAI 5G Core Network</a><ul>
+<li><a class="reference internal" href="#get-core-network-configuration-files-and-docker-images">Get Core Network Configuration files and docker images</a></li>
+<li><a class="reference internal" href="#test-the-deployment-of-core-network">Test the deployment of Core Network</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup-oai-radio-access-network-and-ue">Setup OAI Radio Access Network and UE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#session-3-using-rfsimulator-with-oai">Session 3 - Using RFSimulator with OAI</a></li>
+<li><a class="reference internal" href="#session-4-oai-installation-flexric">Session 4 - OAI Installation + FlexRIC</a></li>
+<li><a class="reference internal" href="#session-5-xapp-onboarding-deployment">Session 5 - xApp onboarding, deployment</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">O-RAN 5G Training</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Session 2 - OAI Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="session-2-oai-installation">
+<span id="xappoai"></span><h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#prerequisites"><span class="std std-ref">Prerequisites</span></a></p></li>
+<li><p><a class="reference internal" href="#setup-cn"><span class="std std-ref">Setup OAI 5G Core Network</span></a></p></li>
+<li><p><span class="xref std std-ref">Setup_RAN</span></p></li>
+<li><p><span class="xref std std-ref">Setup_FlexRIC</span></p></li>
+<li><p><span class="xref std std-ref">Run_nw</span></p></li>
+<li><p><span class="xref std std-ref">exch_trf</span></p></li>
+<li><p><span class="xref std std-ref">run_xapp</span></p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<span id="id1"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<section id="install-dependencies">
+<h3>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>vim<span class="w"> </span>tree<span class="w"> </span>net-tools<span class="w"> </span>libsctp-dev<span class="w"> </span>python3.8<span class="w"> </span>cmake-curses-gui<span class="w"> </span>libpcre2-dev<span class="w"> </span>python-dev<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>libfftw3-dev<span class="w"> </span>libmbedtls-dev<span class="w"> </span>libboost-program-options-dev<span class="w"> </span>libconfig++-dev<span class="w"> </span>libtool<span class="w"> </span>autoconf<span class="w"> </span>python3-pip<span class="w"> </span>curl<span class="w"> </span>bison<span class="w"> </span>flex<span class="w"> </span>iperf<span class="w"> </span>unzip
+</pre></div>
+</div>
+<section id="install-swig-4-1">
+<h4>Install Swig 4.1<a class="headerlink" href="#install-swig-4-1" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/swig/swig.git
+<span class="nb">cd</span><span class="w"> </span>swig
+git<span class="w"> </span>checkout<span class="w"> </span>release-4.1
+./autogen.sh
+./configure<span class="w"> </span>--prefix<span class="o">=</span>/usr/
+make<span class="w"> </span>-j8
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+</section>
+<section id="check-gcc-version-gcc-10-gcc-12-or-gcc-13">
+<h4>Check GCC Version (gcc-10, gcc-12, or gcc-13)<a class="headerlink" href="#check-gcc-version-gcc-10-gcc-12-or-gcc-13" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>--version
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you see that you have gcc 11, follow the steps given <a class="reference external" href="https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa">here</a> to switch to a different version</p>
+</div>
+</section>
+<section id="install-docker-compose">
+<h4>Install Docker Compose<a class="headerlink" href="#install-docker-compose" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>putty<span class="w"> </span>ca-certificates<span class="w"> </span>gnupg
+sudo<span class="w"> </span>install<span class="w"> </span>-m<span class="w"> </span><span class="m">0755</span><span class="w"> </span>-d<span class="w"> </span>/etc/apt/keyrings
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://download.docker.com/linux/ubuntu/gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/etc/apt/keyrings/docker.gpg
+sudo<span class="w"> </span>chmod<span class="w"> </span>a+r<span class="w"> </span>/etc/apt/keyrings/docker.gpg
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [arch=&quot;</span><span class="k">$(</span>dpkg<span class="w"> </span>--print-architecture<span class="k">)</span><span class="s2">&quot; signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu &quot;</span><span class="k">$(</span>.<span class="w"> </span>/etc/os-release<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VERSION_CODENAME</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot; stable&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/docker.list<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker-buildx-plugin<span class="w"> </span>docker-compose-plugin
+</pre></div>
+</div>
+<p>Check docker compose version. The installed version should be <code class="docutils literal notranslate"><span class="pre">v2.29</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>version
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Optional Step: If you do not want to use sudo while executing docker compose commands, run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">usermod</span> <span class="pre">-a</span> <span class="pre">-G</span> <span class="pre">docker</span> <span class="pre">$(whoami)</span></code> and <code class="docutils literal notranslate"><span class="pre">reboot</span></code> the machine.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h2>
+<section id="setup-oai-5g-core-network">
+<span id="setup-cn"></span><h3>Setup OAI 5G Core Network<a class="headerlink" href="#setup-oai-5g-core-network" title="Link to this heading"></a></h3>
+<p>In this demo, we will employ the Core Network solution provided by Open Air Interface. This solution deploys network functions as docker containers. The CN components can be customized according to experimental requirements by modifying the configuration files. However, for the purposes of this tutorial we retain the default functionality.</p>
+<section id="get-core-network-configuration-files-and-docker-images">
+<h4>Get Core Network Configuration files and docker images<a class="headerlink" href="#get-core-network-configuration-files-and-docker-images" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>
+wget<span class="w"> </span>-O<span class="w"> </span>~/oai-cn5g.zip<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path<span class="o">=</span>doc/tutorial_resources/oai-cn5g
+unzip<span class="w"> </span>~/oai-cn5g.zip
+mv<span class="w"> </span>~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g<span class="w"> </span>~/oai-cn5g
+rm<span class="w"> </span>-r<span class="w"> </span>~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g<span class="w"> </span>~/oai-cn5g.zip
+<span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
+sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>pull
+</pre></div>
+</div>
+</section>
+<section id="test-the-deployment-of-core-network">
+<h4>Test the deployment of Core Network<a class="headerlink" href="#test-the-deployment-of-core-network" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="oai_cn_start.png"><img alt="OAI 5G CN Initialization" src="oai_cn_start.png" style="width: 60%;" /></a>
+<p>Verify that all the 10 containers are deployed and <code class="docutils literal notranslate"><span class="pre">healthy</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="oai_cn_verify.png"><img alt="OAI CN Deployment Verification" src="oai_cn_verify.png" style="width: 60%;" /></a>
+<p>Turn the core network off.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down
+</pre></div>
+</div>
+<p>If you prefer seeing real-time container logs streaming to your terminal, run the docker compose command without the -d flag.
+In that mode, pressing Ctrl+C will stop all containers!</p>
+</section>
+</section>
+<section id="setup-oai-radio-access-network-and-ue">
+<span id="setup-ran"></span><h3>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-oai-radio-access-network-and-ue" title="Link to this heading"></a></h3>
+<p>Clone the OAI 5G RAN repository from GitLab, and check out the <cite>develop</cite> branch.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g.git<span class="w"> </span>~/oai
+<span class="nb">cd</span><span class="w"> </span>~/oai
+git<span class="w"> </span>checkout<span class="w"> </span>develop
+</pre></div>
+</div>
+<p>Install OAI dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/
+sudo<span class="w"> </span>./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--build-e2<span class="w"> </span>--ninja
+</pre></div>
+</div>
+<p>This installs a couple important packages required by OAI gNB and UE, including libsctp-dev, libtool, SIMDE and most importantly, ASN.1.
+The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.
+See parts of the logs for this step below:</p>
+<p>Install nrscope dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>libforms-dev<span class="w"> </span>libforms-bin
+</pre></div>
+</div>
+<p>Next, we can build the binaries for the OAI base station (gNB) and the OAI user (UE).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/openairinterface5g/cmake_targets
+sudo<span class="w"> </span>./build_oai<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--ninja<span class="w"> </span>--nrUE<span class="w"> </span>--gNB<span class="w"> </span>--build-lib<span class="w"> </span><span class="s2">&quot;nrscope&quot;</span><span class="w"> </span>-C
+</pre></div>
+</div>
+<p>In a real world system, the core, gNB, and UE would be located on separate systems, but for simplicity we will run everything
+together on one system.</p>
+<p>Note that we compile with the <cite>-w SIMU</cite> option which means that we want to use a simulated radio instead of a physical radio
+such as a USRP software-defined radio. For a USRP we would change this to <cite>-w USRP</cite>.</p>
+</section>
+</section>
+</section>
+<section id="session-3-using-rfsimulator-with-oai">
+<h1>Session 3 - Using RFSimulator with OAI<a class="headerlink" href="#session-3-using-rfsimulator-with-oai" title="Link to this heading"></a></h1>
+<p>5G CN, gNodeB, OAI open-source overview</p>
+<p>How it works end to end with a RF Simulated OAI-gNodeB and OAI NR-UE</p>
+<p>In Terminal 1,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
+sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="nb">cd</span><span class="w"> </span>~/
+</pre></div>
+</div>
+<p>Check if the Core Network is up and running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">1</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
+sudo<span class="w"> </span>./nr-softmodem<span class="w"> </span>-O<span class="w"> </span>../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf<span class="w"> </span>--gNBs.<span class="o">[</span><span class="m">0</span><span class="o">]</span>.min_rxtxtime<span class="w"> </span><span class="m">6</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="gnb_initialization.png"><img alt="gNB Initialization" src="gnb_initialization.png" style="width: 60%;" /></a>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
+sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
+</pre></div>
+</div>
+<p>How to perform traffic tests</p>
+<p id="exch-trf">For uplink ping - UE to network</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-I<span class="w"> </span>oaitun_ue1
+</pre></div>
+</div>
+<p>For Downlink ping - Network to UE</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>ping<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">ctrl+c</span></code> or <code class="docutils literal notranslate"><span class="pre">ctrl+d</span></code> to stop/exit the ping processes.</p>
+<p>Downlink iPerf</p>
+<p>Find out the IP address of the UE by running <code class="docutils literal notranslate"><span class="pre">ifconfig</span></code> on the UE machine and check the IP address field of <code class="docutils literal notranslate"><span class="pre">oaitun_ue1</span></code> network Interface. Here we initialize an iperf server for UDP traffic.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-s<span class="w"> </span>-u<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+<p>The below command generates UDP traffic for 100 seconds, at the rate of 10Mbps from the Core network. In terminal 5,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-u<span class="w"> </span>-t<span class="w"> </span><span class="m">100</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-c<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+<p>Uplink iperf</p>
+<p>On <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>, initialize the iperf server (metrics are printed every second) for TCP traffic run,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-s<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">5</span></code>, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+</section>
+<section id="session-4-oai-installation-flexric">
+<h1>Session 4 - OAI Installation + FlexRIC<a class="headerlink" href="#session-4-oai-installation-flexric" title="Link to this heading"></a></h1>
+<p id="id2">Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/openairinterface5G.git<span class="w"> </span>~/oai
+<span class="nb">cd</span><span class="w"> </span>~/oai
+git<span class="w"> </span>checkout<span class="w"> </span>oaic_workshop_2024_v1
+<span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/
+./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--build-e2<span class="w"> </span>--ninja
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="oai_install.png"><img alt="OAI Installation" src="oai_install.png" style="width: 60%;" /></a>
+<p id="setup-flexric">Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">beabdd07</span></code> commit.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/flexric.git<span class="w"> </span>~/flexric
+<span class="nb">cd</span><span class="w"> </span>~/flexric
+git<span class="w"> </span>checkout<span class="w"> </span>beabdd07
+</pre></div>
+</div>
+<p>Build the flexRIC module.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>../
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="flexric_cmake.png"><img alt="CMake Build of flexRIC module" src="flexric_cmake.png" style="width: 60%;" /></a>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-j<span class="sb">`</span>nproc<span class="sb">`</span>
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="flexric_make_inst.png"><img alt="Tmux cheatsheet" src="flexric_make_inst.png" style="width: 60%;" /></a>
+<p id="run-nw">In Terminal 1,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
+sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="nb">cd</span><span class="w"> </span>~/
+</pre></div>
+</div>
+<p>Check if the Core Network is up and running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">1</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
+sudo<span class="w"> </span>./nr-softmodem<span class="w"> </span>-O<span class="w"> </span>../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf<span class="w"> </span>--gNBs.<span class="o">[</span><span class="m">0</span><span class="o">]</span>.min_rxtxtime<span class="w"> </span><span class="m">6</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="gnb_initialization.png"><img alt="gNB Initialization" src="gnb_initialization.png" style="width: 60%;" /></a>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
+sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">3</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/
+./flexric/build/examples/ric/nearRT-RIC
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="near-rt-ric-initialization.png"><img alt="Near-RT RIC Initialization" src="near-rt-ric-initialization.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="e2_near-rt-ric-resp.png"><img alt="E2 Message reception and RAN function Accept" src="e2_near-rt-ric-resp.png" style="width: 60%;" /></a>
+<p id="id3">For uplink ping - UE to network</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-I<span class="w"> </span>oaitun_ue1
+</pre></div>
+</div>
+<p>For Downlink ping - Network to UE</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>ping<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">ctrl+c</span></code> or <code class="docutils literal notranslate"><span class="pre">ctrl+d</span></code> to stop/exit the ping processes.</p>
+<p>Downlink iPerf</p>
+<p>Find out the IP address of the UE by running <code class="docutils literal notranslate"><span class="pre">ifconfig</span></code> on the UE machine and check the IP address field of <code class="docutils literal notranslate"><span class="pre">oaitun_ue1</span></code> network Interface. Here we initialize an iperf server for UDP traffic.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-s<span class="w"> </span>-u<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+<p>The below command generates UDP traffic for 100 seconds, at the rate of 10Mbps from the Core network. In terminal 5,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-u<span class="w"> </span>-t<span class="w"> </span><span class="m">100</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-c<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+<p>Uplink iperf</p>
+<p>On <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>, initialize the iperf server (metrics are printed every second) for TCP traffic run,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-s<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">5</span></code>, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
+</pre></div>
+</div>
+</section>
+<section id="session-5-xapp-onboarding-deployment">
+<h1>Session 5 - xApp onboarding, deployment<a class="headerlink" href="#session-5-xapp-onboarding-deployment" title="Link to this heading"></a></h1>
+<p>This document describes how to write an xApp in Python, how to deploy it on the RIC platform, and how to use the xApp to communicate with the RAN.</p>
+<p>An xApp is simply an application that is deployed to the <strong>near-real-time</strong> RAN Intelligent Controller (RIC) and is capable of communicating to the RAN.
+(Note that there is also a <strong>non-real-time</strong> RIC; applications stored in the non-real-time RIC are called rApps instead.)
+An xApp can be developed in any programming language, but to be O-RAN compliant, it needs to be able to communicate over the E2 interface to E2 nodes.
+An E2 Node refers to a component of the RAN that can interface with the RIC via E2, usually referring to the base station (DU/CU).
+Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.</p>
+<a class="reference internal image-reference" href="_images/e2like.png"><img alt="_images/e2like.png" src="_images/e2like.png" style="width: 452.0px; height: 201.0px;" /></a>
+<p>To understand how an xApp works, first we must look at how an O-RAN network is implemented.
+The RAN Intelligent Controller (RIC) is capable of dynamically controlling the RAN.
+The near-RT RIC that we will use with OAI is called FlexRIC.</p>
+<p>FlexRIC consists of a collection of microservices, which are small containerized programs.
+These containers are created and deployed using Docker, using an image that we prepare beforehand that consists of everything needed
+for the application to start instantly. FlexRIC acts as a message broker between xApps and E2 nodes.
+The xApps we will use are hosted on a <cite>single</cite> Docker container, but several microservices could make up a single xApp.</p>
+<a class="reference internal image-reference" href="_images/kubernetes.png"><img alt="_images/kubernetes.png" src="_images/kubernetes.png" style="width: 445.20000000000005px; height: 277.2px;" /></a>
+<p>For more information on Docker, see the <cite>Background on Docker, Kubernetes &amp; Helm</cite> section.</p>
+<p>The E2 interface is based on the O-RAN Alliance’s specifications.
+Messages are encoded through the ASN.1 standard, which allows messages to be encoded in binary according to a specification file.
+ASN.1 encoding and decoding is implemented for many programming languages, allowing E2 and xApp specifications to be language-agnostic.</p>
+<p>xApps can define the contents of the data that they send and receive by writing an ASN.1 specification.
+We refer to an xApp’s message specification as a <cite>service model</cite>.
+For example, this is the KPM v2.01 ASN.1 specification, which allows the RAN to send key performance metrics to an xApp,
+such as the bitrate and error rate for each user.</p>
+<p>xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
+xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.</p>
+<a class="reference internal image-reference" href="xapp_oai_static/subscription.png"><img alt="xapp_oai_static/subscription.png" src="xapp_oai_static/subscription.png" /></a>
+<p id="run-xapp">First we will run the KPIMON xApp and observe some metrics. This xApp is based on the <code class="docutils literal notranslate"><span class="pre">E2SM-KPM</span> <span class="pre">(Key</span> <span class="pre">Performance</span> <span class="pre">Metrics)</span></code> service model. It is responsible for collecting metrics collected by the RAN and forwarding it to relevant xApps to help in RAN control.
+The KPM service model sends data from the RAN to the RIC, which we call an indication message.
+When we want the RIC to control the RAN, we must send a control message from the xApp, but in this case, we only receive indication messages.</p>
+<p>Per O-RAN specifications, 5G measurements supported by KPM are specified in <strong>3GPP TS 28.552</strong>. Some of the metrics supported are <code class="docutils literal notranslate"><span class="pre">DRB.PdcpSduVolumeDL</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.PdcpSduVolumeUL</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.RlcSduDelayDl</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.UEThpDl</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.UEThpUl</span></code>, <code class="docutils literal notranslate"><span class="pre">RRU.PrbTotDl</span></code>, <code class="docutils literal notranslate"><span class="pre">RRU.PrbTotUl</span></code>.
+In this implementation <strong>Report Style 4 (Section 7.4.5)</strong> has been considered.</p>
+<p>In a new Terminal, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/flexric
+./build/examples/xApp/c/monitor/xapp_kpm_moni
+</pre></div>
+</div>
+<p>The output should look like this:</p>
+<p>FlexRIC supports writing xApps in C or Python.</p>
+<p>Writing an xApp in C is fairly simple. Looking at the KPIMON xApp:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">fr_args_t</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">init_fr_args</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">//Init the xApp</span>
+<span class="w">    </span><span class="n">init_xapp_api</span><span class="p">(</span><span class="o">&amp;</span><span class="n">args</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">e2_node_arr_t</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e2_nodes_xapp_api</span><span class="p">();</span>
+<span class="w">    </span><span class="n">defer</span><span class="p">({</span><span class="w"> </span><span class="n">free_e2_node_arr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">nodes</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">nodes</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connected E2 nodes = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// KPM indication</span>
+<span class="n">sm_ans_xapp_t</span><span class="o">*</span><span class="w"> </span><span class="n">kpm_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="n">nodes</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">    </span><span class="n">kpm_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">sm_ans_xapp_t</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">kpm_handle</span><span class="w">  </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">e2_node_connected_t</span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nodes</span><span class="p">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="o">-&gt;</span><span class="n">len_rf</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Registered node %d ran func id = %d </span><span class="se">\n</span><span class="s"> &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">-&gt;</span><span class="n">ack_rf</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">id</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">////////////</span>
+<span class="w">    </span><span class="c1">// START KPM</span>
+<span class="w">    </span><span class="c1">////////////</span>
+<span class="w">    </span><span class="n">kpm_sub_data_t</span><span class="w"> </span><span class="n">kpm_sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="n">defer</span><span class="p">({</span><span class="w"> </span><span class="n">free_kpm_sub_data</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kpm_sub</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">    </span><span class="c1">// KPM Event Trigger</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">period_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+<span class="w">    </span><span class="n">kpm_sub</span><span class="p">.</span><span class="n">ev_trg_def</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_ev_trig</span><span class="p">(</span><span class="n">period_ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;[xApp]: reporting period = %lu [ms]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">period_ms</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// KPM Action Definition</span>
+<span class="w">    </span><span class="n">kpm_sub</span><span class="p">.</span><span class="n">sz_ad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">kpm_sub</span><span class="p">.</span><span class="n">ad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">kpm_act_def_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">kpm_sub</span><span class="p">.</span><span class="n">ad</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">KPM_ran_function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// sm_cb_kpm is our callback function when a KPM indication message is received</span>
+<span class="w">    </span><span class="n">kpm_handle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">report_sm_xapp_api</span><span class="p">(</span><span class="o">&amp;</span><span class="n">nodes</span><span class="p">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">KPM_ran_function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kpm_sub</span><span class="p">,</span><span class="w"> </span><span class="n">sm_cb_kpm</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">kpm_handle</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">success</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">sm_cb_kpm</span><span class="p">(</span><span class="n">sm_ag_if_rd_t</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">rd</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">rd</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">rd</span><span class="o">-&gt;</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">INDICATION_MSG_AGENT_IF_ANS_V0</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">rd</span><span class="o">-&gt;</span><span class="n">ind</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KPM_STATS_V3_0</span><span class="p">);</span>
+
+<span class="c1">// Reading Indication Message Format 3</span>
+<span class="n">kpm_ind_data_t</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rd</span><span class="o">-&gt;</span><span class="n">ind</span><span class="p">.</span><span class="n">kpm</span><span class="p">.</span><span class="n">ind</span><span class="p">;</span>
+<span class="n">kpm_ric_ind_hdr_format_1_t</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">hdr_frm_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ind</span><span class="o">-&gt;</span><span class="n">hdr</span><span class="p">.</span><span class="n">kpm_ric_ind_hdr_format_1</span><span class="p">;</span>
+<span class="n">kpm_ind_msg_format_3_t</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">msg_frm_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ind</span><span class="o">-&gt;</span><span class="n">msg</span><span class="p">.</span><span class="n">frm_3</span><span class="p">;</span>
+
+
+<span class="kt">int64_t</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time_now_us</span><span class="p">();</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">lock_guard</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">%7d KPM ind_msg latency = %ld [μs]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">,</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">hdr_frm_1</span><span class="o">-&gt;</span><span class="n">collectStartTime</span><span class="p">);</span><span class="w">  </span><span class="c1">// xApp &lt;-&gt; E2 Node</span>
+
+<span class="w">    </span><span class="c1">// Reported list of measurements per UE</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">ue_meas_report_lst_len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ue_meas_report_lst</span><span class="p">.</span><span class="n">type</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">GNB_UE_ID_E2SM</span><span class="p">:</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ue_meas_report_lst</span><span class="p">.</span><span class="n">gnb</span><span class="p">.</span><span class="n">gnb_cu_ue_f1ap_lst</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ue_meas_report_lst</span><span class="p">.</span><span class="n">gnb</span><span class="p">.</span><span class="n">gnb_cu_ue_f1ap_lst_len</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;UE ID type = gNB-CU, gnb_cu_ue_f1ap = %u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ue_meas_report_lst</span><span class="p">.</span><span class="n">gnb</span><span class="p">.</span><span class="n">gnb_cu_ue_f1ap_lst</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;UE ID type = gNB, amf_ue_ngap_id = %lu</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ue_meas_report_lst</span><span class="p">.</span><span class="n">gnb</span><span class="p">.</span><span class="n">amf_ue_ngap_id</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">GNB_DU_UE_ID_E2SM</span><span class="p">:</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;UE ID type = gNB-DU, gnb_cu_ue_f1ap = %u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ue_meas_report_lst</span><span class="p">.</span><span class="n">gnb_du</span><span class="p">.</span><span class="n">gnb_cu_ue_f1ap</span><span class="p">);</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">default</span><span class="o">:</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;UE ID type not yet implemented&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">kpm_ind_msg_format_1_t</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">msg_frm_3</span><span class="o">-&gt;</span><span class="n">meas_report_per_ue</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind_msg_format_1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// UE Measurements per granularity period</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">&lt;</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst_len</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">z</span><span class="o">&lt;</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_len</span><span class="p">;</span><span class="w"> </span><span class="n">z</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_info_lst_len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_info_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">meas_type</span><span class="p">.</span><span class="n">type</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="no">NAME_MEAS_TYPE</span><span class="p">:</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Get the Measurement Name</span>
+<span class="w">            </span><span class="kt">char</span><span class="w"> </span><span class="n">meas_info_name_str</span><span class="p">[</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_info_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">meas_type</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="w">            </span><span class="n">memcpy</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_info_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">meas_type</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_info_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">meas_type</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+<span class="w">            </span><span class="n">meas_info_name_str</span><span class="p">[</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_info_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">meas_type</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+<span class="w">            </span><span class="c1">// Get the value of the Measurement</span>
+<span class="w">            </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">value</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="no">REAL_MEAS_VALUE</span><span class="p">:</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DRB.RlcSduDelayDl&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DRB.RlcSduDelayDl = %.2f [μs]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">real_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DRB.UEThpDl&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DRB.UEThpDl = %.2f [kbps]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">real_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DRB.UEThpUl&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DRB.UEThpUl = %.2f [kbps]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">real_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Measurement Name not yet implemented %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">meas_info_name_str</span><span class="p">);</span>
+<span class="w">                </span><span class="c1">//assert(false &amp;&amp; &quot;Measurement Name not yet implemented&quot;);</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="no">INTEGER_MEAS_VALUE</span><span class="p">:</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RRU.PrbTotDl&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;RRU.PrbTotDl = %d [PRBs]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">int_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RRU.PrbTotUl&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;RRU.PrbTotUl = %d [PRBs]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">int_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DRB.PdcpSduVolumeDL&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DRB.PdcpSduVolumeDL = %d [kb]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">int_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">meas_info_name_str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DRB.PdcpSduVolumeUL&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DRB.PdcpSduVolumeUL = %d [kb]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">meas_record_lst</span><span class="p">[</span><span class="n">z</span><span class="p">].</span><span class="n">int_val</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Measurement Name not yet implemented %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">meas_info_name_str</span><span class="p">);</span>
+<span class="w">                </span><span class="c1">//assert(false &amp;&amp; &quot;Measurement Name not yet implemented&quot;);</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="k">default</span><span class="o">:</span>
+<span class="w">                </span><span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Value not recognized&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="no">ID_MEAS_TYPE</span><span class="p">:</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot; ID_MEAS_TYPE </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">            </span><span class="k">default</span><span class="o">:</span>
+<span class="w">            </span><span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Measurement Type not yet implemented&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">incomplete_flag</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">msg_frm_1</span><span class="o">-&gt;</span><span class="n">meas_data_lst</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">incomplete_flag</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">TRUE_ENUM_VALUE</span><span class="p">)</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Measurement Record not reliable&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">counter</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This xApp enables control of RAN services exposed by the RAN. The current implementation exposes RAN control function <code class="docutils literal notranslate"><span class="pre">QoS</span> <span class="pre">flow</span> <span class="pre">mapping</span> <span class="pre">configuration</span></code>. This version of the xApp supports <code class="docutils literal notranslate"><span class="pre">REPORT</span> <span class="pre">Service</span> <span class="pre">Style</span> <span class="pre">4</span></code> (UE Information - section 7.4.5) - aperiodic subscription for <code class="docutils literal notranslate"><span class="pre">UE</span> <span class="pre">RRC</span> <span class="pre">State</span> <span class="pre">Change</span></code> and <code class="docutils literal notranslate"><span class="pre">CONTROL</span> <span class="pre">Service</span> <span class="pre">Style</span> <span class="pre">1</span></code> (“Radio Bearer Control” - section 7.6.2) - “QoS flow mapping configuration” (e.g creating a new DRB).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/flexric
+./build/examples/xApp/c/kpm_rc/xapp_kpm_rc
+</pre></div>
+</div>
+<p>If we observe the C code:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// START RC</span>
+<span class="c1">////////////</span>
+
+<span class="c1">// RC On Demand report</span>
+<span class="c1">//  rc_sub_data_t rc_sub = {0};</span>
+<span class="c1">//  defer({ free_rc_sub_data(&amp;rc_sub); });</span>
+<span class="c1">//  sm_ans_xapp_t h_2 = report_sm_xapp_api(&amp;nodes.n[0].id, RC_ran_function, &amp;rc_sub, sm_cb_rc);</span>
+<span class="c1">//  assert(h_2.success == true);</span>
+
+<span class="c1">// RC Control</span>
+<span class="n">rc_ctrl_req_data_t</span><span class="w"> </span><span class="n">rc_ctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="n">rc_ctrl</span><span class="p">.</span><span class="n">hdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_rc_ctrl_hdr</span><span class="p">();</span>
+<span class="n">rc_ctrl</span><span class="p">.</span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_rc_ctrl_msg</span><span class="p">();</span>
+
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">RC_ran_function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+<span class="w">    </span><span class="n">ngran_node_t</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nodes</span><span class="p">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span><span class="p">.</span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ngran_gNB</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ngran_gNB_CU</span><span class="p">)</span>
+<span class="w">    </span><span class="n">control_sm_xapp_api</span><span class="p">(</span><span class="o">&amp;</span><span class="n">nodes</span><span class="p">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">RC_ran_function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rc_ctrl</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">free_rc_ctrl_req_data</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rc_ctrl</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Investigating gen_rc_ctrl_hdr and gen_rc_ctrl_msg allows us to see what messages we are sending:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// this enum provides all the potential types of RAN control that this xApp can do.</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DRB_QoS_Configuration_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">QoS_flow_mapping_configuration_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Logical_channel_configuration_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Radio_admission_control_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DRB_termination_control_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DRB_split_ratio_control_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PDCP_Duplication_control_7_6_2_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="n">rc_ctrl_service_style_1_e</span><span class="p">;</span>
+
+
+<span class="k">static</span>
+<span class="n">e2sm_rc_ctrl_hdr_frmt_1_t</span><span class="w"> </span><span class="nf">gen_rc_ctrl_hdr_frmt_1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">e2sm_rc_ctrl_hdr_frmt_1_t</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="c1">// 6.2.2.6</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="n">lock_guard</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ue_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cp_ue_id_e2sm</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ue_id</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// CONTROL Service Style 1: Radio Bearer Control</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ric_style_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// QoS flow mapping conf</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ctrl_act_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QoS_flow_mapping_configuration_7_6_2_1</span><span class="w"> </span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">dst</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span>
+<span class="n">e2sm_rc_ctrl_hdr_t</span><span class="w"> </span><span class="nf">gen_rc_ctrl_hdr</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">e2sm_rc_ctrl_hdr_t</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="c1">// Radio Bearer Control</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FORMAT_1_E2SM_RC_CTRL_HDR</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">frmt_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_rc_ctrl_hdr_frmt_1</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">dst</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DRB_ID_8_4_2_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LIST_OF_QOS_FLOWS_MOD_IN_DRB_8_4_2_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">QOS_FLOW_ITEM_8_4_2_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="n">QOS_FLOW_ID_8_4_2_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">    </span><span class="n">QOS_FLOW_MAPPING_IND_8_4_2_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="n">qos_flow_mapping_conf_e</span><span class="p">;</span>
+
+<span class="k">static</span>
+<span class="n">e2sm_rc_ctrl_msg_frmt_1_t</span><span class="w"> </span><span class="nf">gen_rc_ctrl_msg_frmt_1_qos_flow_map</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">e2sm_rc_ctrl_msg_frmt_1_t</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="c1">// 8.4.2.2 QoS flow mapping configuration</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">sz_ran_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">seq_ran_param_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DRB_ID_8_4_2_2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ELEMENT_KEY_FLAG_TRUE_RAN_PARAMETER_VAL_TYPE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ran_parameter_value_t</span><span class="p">))</span><span class="w"> </span><span class="p">;</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Let&#39;s suppose that it is the DRB 5</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="o">-&gt;</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INTEGER_RAN_PARAMETER_VALUE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="o">-&gt;</span><span class="n">int_ran</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// List of QoS Flows to be modified in DRB</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LIST_OF_QOS_FLOWS_MOD_IN_DRB_8_4_2_2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LIST_RAN_PARAMETER_VAL_TYPE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">lst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ran_param_list_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">lst</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ran_param_list_t</span><span class="o">*</span><span class="w"> </span><span class="n">rpl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dst</span><span class="p">.</span><span class="n">ran_param</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">lst</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">sz_lst_ran_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">lst_ran_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">lst_ran_param_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">lst_ran_param</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// QoS Flow Item</span>
+<span class="w">    </span><span class="c1">// Bug in the standard. RAN Parameter List 9.3.13</span>
+<span class="w">    </span><span class="c1">// has a mandatory ie RAN Parameter ID 9.3.8</span>
+<span class="w">    </span><span class="c1">// and a mandatory ie RAN Parameter Structure 9.3.12</span>
+<span class="w">    </span><span class="c1">// However, the ASN</span>
+<span class="w">    </span><span class="c1">// RANParameter-LIST ::= SEQUENCE {</span>
+<span class="w">    </span><span class="c1">// list-of-ranParameter  SEQUENCE (SIZE(1..maxnoofItemsinList)) OF RANParameter-STRUCTURE,</span>
+<span class="w">    </span><span class="c1">// ..</span>
+<span class="w">    </span><span class="c1">// }</span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">// Misses RAN Parameter ID and only has RAN Parameter Structure</span>
+
+<span class="w">    </span><span class="c1">// rpl-&gt;lst_ran_param[0].ran_param_id = QOS_FLOW_ITEM_8_4_2_2;</span>
+
+<span class="w">    </span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">lst_ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_struct</span><span class="p">.</span><span class="n">sz_ran_param_struct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">lst_ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_struct</span><span class="p">.</span><span class="n">ran_param_struct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">seq_ran_param_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">lst_ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_struct</span><span class="p">.</span><span class="n">ran_param_struct</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">seq_ran_param_t</span><span class="o">*</span><span class="w"> </span><span class="n">rps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpl</span><span class="o">-&gt;</span><span class="n">lst_ran_param</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_struct</span><span class="p">.</span><span class="n">ran_param_struct</span><span class="w"> </span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// QoS Flow Identifier</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QOS_FLOW_ID_8_4_2_2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ELEMENT_KEY_FLAG_TRUE_RAN_PARAMETER_VAL_TYPE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ran_parameter_value_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="o">-&gt;</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INTEGER_RAN_PARAMETER_VALUE</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Let&#39;s suppose that we have QFI 10</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_true</span><span class="o">-&gt;</span><span class="n">int_ran</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// QoS Flow Mapping Indication</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QOS_FLOW_MAPPING_IND_8_4_2_2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ELEMENT_KEY_FLAG_FALSE_RAN_PARAMETER_VAL_TYPE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_false</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ran_parameter_value_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">rps</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_false</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;Memory exhausted&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// ENUMERATED (ul, dl, ...)</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_false</span><span class="o">-&gt;</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INTEGER_RAN_PARAMETER_VALUE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rps</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ran_param_val</span><span class="p">.</span><span class="n">flag_false</span><span class="o">-&gt;</span><span class="n">int_ran</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">dst</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span>
+<span class="n">e2sm_rc_ctrl_msg_t</span><span class="w"> </span><span class="nf">gen_rc_ctrl_msg</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">e2sm_rc_ctrl_msg_t</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="c1">// Radio Bearer Control</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FORMAT_1_E2SM_RC_CTRL_MSG</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">//dst.frmt_1 = gen_rc_ctrl_msg_frmt_1();</span>
+<span class="w">    </span><span class="n">dst</span><span class="p">.</span><span class="n">frmt_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_rc_ctrl_msg_frmt_1_qos_flow_map</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">dst</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NextG Wireless Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
