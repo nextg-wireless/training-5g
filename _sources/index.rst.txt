@@ -4,21 +4,19 @@
 Session 2 - OAI Installation
 ============================
 
-Table of Contents
-=================
-
-* :ref:`Prerequisites`
-* :ref:`Setup_CN`
-* :ref:`Setup_RAN`
-* :ref:`Setup_FlexRIC`
-* :ref:`Run_nw`
-* :ref:`exch_trf`
-* :ref:`run_xapp`
-
 .. _Prerequisites:
 
 Prerequisites
 =============
+
+System Requirements
+--------------------
+
+* Operating System: Ubuntu 24.04 LTS (x86, 64-bit)
+  * ARM devices such as MacBook M1 (Apple silicon) are unsupported!
+* CPU: At least 8 cores
+  * We will be running the base station and the user on one system, so ideally more cores is better.
+* RAM: 32GB
 
 Install Dependencies
 --------------------
@@ -287,7 +285,7 @@ In ``terminal 5``, run
 Session 4 - OAI Installation + FlexRIC
 ======================================
 
-.. _Setup_RAN:
+.. _Setup_RAN_E2:
 
 Setup OAI Radio Access Network and UE
 -------------------------------------
@@ -340,7 +338,7 @@ Build the flexRIC module.
    :width: 60%
    :alt: Tmux cheatsheet
 
-.. _Run_nw:
+.. _Run_nw_E2:
 
 Deploy 5G Network
 -----------------
@@ -409,43 +407,8 @@ In ``terminal 3``,
 Exchange traffic between Network and UE
 ---------------------------------------
 
-Streaming Traffic using Ping
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-For uplink ping - UE to network
-
-In ``terminal 4``,
-
-.. code-block:: bash
-
-	ping 192.168.70.135 -I oaitun_ue1
-
-For Downlink ping - Network to UE
-
-.. code-block:: bash
-
-	sudo docker exec -it oai-ext-dn ping <ue_ip>
-
-Use ``ctrl+c`` or ``ctrl+d`` to stop/exit the ping processes.
-
 Streaming Traffic with iPerf
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Downlink iPerf
-
-Find out the IP address of the UE by running ``ifconfig`` on the UE machine and check the IP address field of ``oaitun_ue1`` network Interface. Here we initialize an iperf server for UDP traffic.
-
-In ``terminal 4``,
-
-.. code-block:: bash
-
-	iperf -s -u -i 1 -B <ue_ip>
-
-The below command generates UDP traffic for 100 seconds, at the rate of 10Mbps from the Core network. In terminal 5,
-
-.. code-block:: bash
-
-	sudo docker exec -it oai-ext-dn iperf -u -t 100 -i 1 -fk -B 192.168.70.135 -b 10M -c <ue_ip>
 
 Uplink iperf
 
@@ -507,9 +470,6 @@ xApps wait for base stations to connect. When connecting to the RIC, the RAN mus
 
 .. image:: xapp_oai_static/subscription.png
    :scale: 40%
-
-
-
 
 .. _run_xapp:
 
@@ -922,4 +882,3 @@ Investigating gen_rc_ctrl_hdr and gen_rc_ctrl_msg allows us to see what messages
 
         return dst;
     }
-

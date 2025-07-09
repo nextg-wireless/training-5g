@@ -46,8 +46,8 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Session 2 - OAI Installation</a><ul>
-<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#system-requirements">System Requirements</a></li>
 <li><a class="reference internal" href="#install-dependencies">Install Dependencies</a><ul>
 <li><a class="reference internal" href="#install-swig-4-1">Install Swig 4.1</a></li>
 <li><a class="reference internal" href="#check-gcc-version-gcc-10-gcc-12-or-gcc-13">Check GCC Version (gcc-10, gcc-12, or gcc-13)</a></li>
@@ -98,20 +98,18 @@
              
   <section id="session-2-oai-installation">
 <span id="xappoai"></span><h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
-<section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="#prerequisites"><span class="std std-ref">Prerequisites</span></a></p></li>
-<li><p><a class="reference internal" href="#setup-cn"><span class="std std-ref">Setup OAI 5G Core Network</span></a></p></li>
-<li><p><span class="xref std std-ref">Setup_RAN</span></p></li>
-<li><p><span class="xref std std-ref">Setup_FlexRIC</span></p></li>
-<li><p><span class="xref std std-ref">Run_nw</span></p></li>
-<li><p><span class="xref std std-ref">exch_trf</span></p></li>
-<li><p><span class="xref std std-ref">run_xapp</span></p></li>
-</ul>
-</section>
 <section id="prerequisites">
 <span id="id1"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<section id="system-requirements">
+<h3>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Operating System: Ubuntu 24.04 LTS (x86, 64-bit)
+* ARM devices such as MacBook M1 (Apple silicon) are unsupported!</p></li>
+<li><p>CPU: At least 8 cores
+* We will be running the base station and the user on one system, so ideally more cores is better.</p></li>
+<li><p>RAM: 32GB</p></li>
+</ul>
+</section>
 <section id="install-dependencies">
 <h3>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>vim<span class="w"> </span>tree<span class="w"> </span>net-tools<span class="w"> </span>libsctp-dev<span class="w"> </span>python3.8<span class="w"> </span>cmake-curses-gui<span class="w"> </span>libpcre2-dev<span class="w"> </span>python-dev<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>libfftw3-dev<span class="w"> </span>libmbedtls-dev<span class="w"> </span>libboost-program-options-dev<span class="w"> </span>libconfig++-dev<span class="w"> </span>libtool<span class="w"> </span>autoconf<span class="w"> </span>python3-pip<span class="w"> </span>curl<span class="w"> </span>bison<span class="w"> </span>flex<span class="w"> </span>iperf<span class="w"> </span>unzip
@@ -287,7 +285,7 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </section>
 <section id="session-4-oai-installation-flexric">
 <h1>Session 4 - OAI Installation + FlexRIC<a class="headerlink" href="#session-4-oai-installation-flexric" title="Link to this heading"></a></h1>
-<p id="id2">Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
+<p id="setup-ran-e2">Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/openairinterface5G.git<span class="w"> </span>~/oai
 <span class="nb">cd</span><span class="w"> </span>~/oai
 git<span class="w"> </span>checkout<span class="w"> </span>oaic_workshop_2024_v1
@@ -314,7 +312,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="flexric_make_inst.png"><img alt="Tmux cheatsheet" src="flexric_make_inst.png" style="width: 60%;" /></a>
-<p id="run-nw">In Terminal 1,</p>
+<p id="run-nw-e2">In Terminal 1,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
 sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 <span class="nb">cd</span><span class="w"> </span>~/
@@ -342,27 +340,7 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </div>
 <a class="reference internal image-reference" href="near-rt-ric-initialization.png"><img alt="Near-RT RIC Initialization" src="near-rt-ric-initialization.png" style="width: 60%;" /></a>
 <a class="reference internal image-reference" href="e2_near-rt-ric-resp.png"><img alt="E2 Message reception and RAN function Accept" src="e2_near-rt-ric-resp.png" style="width: 60%;" /></a>
-<p id="id3">For uplink ping - UE to network</p>
-<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-I<span class="w"> </span>oaitun_ue1
-</pre></div>
-</div>
-<p>For Downlink ping - Network to UE</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>ping<span class="w"> </span>&lt;ue_ip&gt;
-</pre></div>
-</div>
-<p>Use <code class="docutils literal notranslate"><span class="pre">ctrl+c</span></code> or <code class="docutils literal notranslate"><span class="pre">ctrl+d</span></code> to stop/exit the ping processes.</p>
-<p>Downlink iPerf</p>
-<p>Find out the IP address of the UE by running <code class="docutils literal notranslate"><span class="pre">ifconfig</span></code> on the UE machine and check the IP address field of <code class="docutils literal notranslate"><span class="pre">oaitun_ue1</span></code> network Interface. Here we initialize an iperf server for UDP traffic.</p>
-<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-s<span class="w"> </span>-u<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
-</pre></div>
-</div>
-<p>The below command generates UDP traffic for 100 seconds, at the rate of 10Mbps from the Core network. In terminal 5,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-u<span class="w"> </span>-t<span class="w"> </span><span class="m">100</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-c<span class="w"> </span>&lt;ue_ip&gt;
-</pre></div>
-</div>
-<p>Uplink iperf</p>
+<p id="id2">Uplink iperf</p>
 <p>On <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>, initialize the iperf server (metrics are printed every second) for TCP traffic run,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-s<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135
 </pre></div>
