@@ -1,21 +1,20 @@
 .. _xappoai:
 
-============================
-Session 2 - OAI Installation
-============================
-
-.. _Prerequisites:
-
-Prerequisites
-=============
+==============================
+Session 1 - Setup Requirements
+==============================
 
 System Requirements
 --------------------
 
 * Operating System: Ubuntu 24.04 LTS (x86, 64-bit)
+
   * ARM devices such as MacBook M1 (Apple silicon) are unsupported!
+
 * CPU: At least 8 cores
+
   * We will be running the base station and the user on one system, so ideally more cores is better.
+
 * RAM: 32GB
 
 Install Dependencies
@@ -71,6 +70,58 @@ Check docker compose version. The installed version should be ``v2.29``.
 .. note::
 
 	Optional Step: If you do not want to use sudo while executing docker compose commands, run ``sudo usermod -a -G docker $(whoami)`` and ``reboot`` the machine.
+
+
+============================
+Session 2 - OAI Installation
+============================
+
+Background
+==========
+
+What is Open RAN?
+~~~~~~~~~~~~~~~~~
+
+Open RAN (Radio Access Network) is a virtualized, disaggregated design paradigm for 5G/6G cellular networks.
+It refers to the concept of a cellular network that is built on open interfaces and modular components.
+
+Open RAN is important because it...
+* enables networks built from components by multiple vendors, replacing the current proprietary systems belonging to each vendor and mobile carrier
+* allows vendors to share physical and cloud resources in the same cell tower
+* is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.
+
+What is O-RAN?
+~~~~~~~~~~~~~~
+
+O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research & academic institutions.
+"`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>` is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
+
+* Founded by AT&T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018
+
+* Based on two core principles: Openness, Intelligence
+
+* Flexibility by design
+
+    * Open interfaces and APIs
+
+
+What is OAI?
+~~~~~~~~~~~~
+
+Thare are various open-source software solutions built upon the 5G and O-RAN standards.
+The one we will use in this training is OpenAirInterface or OAI, which is a software stack providing the components needed for an operational
+radio access network purely implemented in software.
+
+The major components are:
+
+* The 5G core network
+
+* The gNB / gNodeB / base station (BS)
+
+  * In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),
+    where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.
+
+* The user equipment (UE)
 
 Setup
 =====
@@ -285,6 +336,28 @@ In ``terminal 5``, run
 Session 4 - OAI Installation + FlexRIC
 ======================================
 
+What is O-RAN?
+~~~~~~~~~~~~~~
+
+O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research & academic institutions.
+"`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>` is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
+
+* Founded by AT&T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018
+
+* Based on two core principles: Openness, Intelligence
+
+* Flexibility by design
+
+    * Open interfaces and APIs
+
+* RAN Intelligent Controllers (RICs)
+
+    * Abstract the networks
+
+    * Allow telecom operators to implement custom control logic
+
+For more information, refer to the presentation.
+
 .. _Setup_RAN_E2:
 
 Setup OAI Radio Access Network and UE
@@ -424,9 +497,9 @@ In ``terminal 5``, run
 
 	iperf -c 192.168.70.135 -i 1 -b 10M -B <ue_ip>
 
-======================================
+=======================================
 Session 5 - xApp onboarding, deployment
-======================================
+=======================================
 
 This document describes how to write an xApp in Python, how to deploy it on the RIC platform, and how to use the xApp to communicate with the RAN.
 
@@ -434,13 +507,21 @@ Background
 ----------
 
 An xApp is simply an application that is deployed to the **near-real-time** RAN Intelligent Controller (RIC) and is capable of communicating to the RAN.
-(Note that there is also a **non-real-time** RIC; applications stored in the non-real-time RIC are called rApps instead.)
 An xApp can be developed in any programming language, but to be O-RAN compliant, it needs to be able to communicate over the E2 interface to E2 nodes.
 An E2 Node refers to a component of the RAN that can interface with the RIC via E2, usually referring to the base station (DU/CU).
 Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.
 
 .. image:: xapp_oai_static/e2like.png
    :scale: 50%
+
+There is also a **non-real-time** RIC; applications stored in the non-real-time RIC are called rApps instead.
+Near-real-time applications are defined as running within 10ms to 1 second, while a non-real-time application takes longer than 1 second.
+
+Below is a comparison between xApps and rApps:
+
+.. image:: xapp_oai_static/xapp_vs_rapp.png
+   :scale: 50%
+
 
 To understand how an xApp works, first we must look at how an O-RAN network is implemented.
 The RAN Intelligent Controller (RIC) is capable of dynamically controlling the RAN.
@@ -456,7 +537,7 @@ The xApps we will use are hosted on a `single` Docker container, but several mic
 
 For more information on Docker, see the `Background on Docker, Kubernetes & Helm` section.
 
-The E2 interface is based on the O-RAN Alliance's specifications.
+The E2 interface is based on the O-RAN ALLIANCE's specifications.
 Messages are encoded through the ASN.1 standard, which allows messages to be encoded in binary according to a specification file.
 ASN.1 encoding and decoding is implemented for many programming languages, allowing E2 and xApp specifications to be theoretically language-agnostic.
 
@@ -483,8 +564,8 @@ Below is an excerpt of example ASN.1 syntax:
         Payload DownlinkMetrics
     }
 
-The O-RAN specifications are available on the O-RAN Alliance's website: https://specifications.o-ran.org/specifications
-Some examples of E2 service models which are standardized by the O-RAN Alliance include:
+The O-RAN specifications are available on the O-RAN ALLIANCE's website: https://specifications.o-ran.org/specifications
+Some examples of E2 service models which are standardized by the O-RAN ALLIANCE include:
 
 * E2SM-KPM, which allows the RAN to send key performance metrics to an xApp,
 such as the bitrate and error rate for each user

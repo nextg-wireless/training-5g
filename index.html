@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Session 2 - OAI Installation &mdash; O-RAN 5G Training 0.1 documentation</title>
+  <title>Session 1 - Setup Requirements &mdash; O-RAN 5G Training 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -45,8 +45,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Session 2 - OAI Installation</a><ul>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#">Session 1 - Setup Requirements</a><ul>
 <li><a class="reference internal" href="#system-requirements">System Requirements</a></li>
 <li><a class="reference internal" href="#install-dependencies">Install Dependencies</a><ul>
 <li><a class="reference internal" href="#install-swig-4-1">Install Swig 4.1</a></li>
@@ -56,7 +55,7 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#setup">Setup</a><ul>
+<li><a class="reference internal" href="#session-2-oai-installation">Session 2 - OAI Installation</a><ul>
 <li><a class="reference internal" href="#setup-oai-5g-core-network">Setup OAI 5G Core Network</a><ul>
 <li><a class="reference internal" href="#get-core-network-configuration-files-and-docker-images">Get Core Network Configuration files and docker images</a></li>
 <li><a class="reference internal" href="#test-the-deployment-of-core-network">Test the deployment of Core Network</a></li>
@@ -65,11 +64,46 @@
 <li><a class="reference internal" href="#setup-oai-radio-access-network-and-ue">Setup OAI Radio Access Network and UE</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#session-3-using-rfsimulator-with-oai">Session 3 - Using RFSimulator with OAI</a><ul>
+<li><a class="reference internal" href="#deploy-5g-network">Deploy 5G Network</a><ul>
+<li><a class="reference internal" href="#start-the-core-network">Start the Core Network</a></li>
+<li><a class="reference internal" href="#start-the-gnb">Start the gNB</a></li>
+<li><a class="reference internal" href="#start-the-ue">Start the UE</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#session-3-using-rfsimulator-with-oai">Session 3 - Using RFSimulator with OAI</a></li>
-<li><a class="reference internal" href="#session-4-oai-installation-flexric">Session 4 - OAI Installation + FlexRIC</a></li>
-<li><a class="reference internal" href="#session-5-xapp-onboarding-deployment">Session 5 - xApp onboarding, deployment</a></li>
+<li><a class="reference internal" href="#exchange-traffic-between-network-and-ue">Exchange traffic between Network and UE</a><ul>
+<li><a class="reference internal" href="#streaming-traffic-using-ping">Streaming Traffic using Ping</a></li>
+<li><a class="reference internal" href="#streaming-traffic-with-iperf">Streaming Traffic with iPerf</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#session-4-oai-installation-flexric">Session 4 - OAI Installation + FlexRIC</a><ul>
+<li><a class="reference internal" href="#setup-ran-e2">Setup OAI Radio Access Network and UE</a></li>
+<li><a class="reference internal" href="#setup-flexric">Setup FlexRIC</a></li>
+<li><a class="reference internal" href="#run-nw-e2">Deploy 5G Network</a><ul>
+<li><a class="reference internal" href="#id4">Start the Core Network</a></li>
+<li><a class="reference internal" href="#id5">Start the gNB</a></li>
+<li><a class="reference internal" href="#id6">Start the UE</a></li>
+<li><a class="reference internal" href="#start-the-near-rt-ric">Start the near-RT RIC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Exchange traffic between Network and UE</a><ul>
+<li><a class="reference internal" href="#id9">Streaming Traffic with iPerf</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#session-5-xapp-onboarding-deployment">Session 5 - xApp onboarding, deployment</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#run-xapps">Run xApps</a><ul>
+<li><a class="reference internal" href="#kpimon-xapp">KPIMON xApp</a></li>
+<li><a class="reference internal" href="#behind-the-scenes">Behind the scenes</a></li>
+<li><a class="reference internal" href="#ran-control-rc-xapp">RAN Control (RC) xApp</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
         </div>
@@ -86,7 +120,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Session 2 - OAI Installation</li>
+      <li class="breadcrumb-item active">Session 1 - Setup Requirements</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,27 +130,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="session-2-oai-installation">
-<span id="xappoai"></span><h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
-<section id="prerequisites">
-<span id="id1"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+  <section id="session-1-setup-requirements">
+<span id="xappoai"></span><h1>Session 1 - Setup Requirements<a class="headerlink" href="#session-1-setup-requirements" title="Link to this heading"></a></h1>
 <section id="system-requirements">
-<h3>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h3>
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Operating System: Ubuntu 24.04 LTS (x86, 64-bit)
-* ARM devices such as MacBook M1 (Apple silicon) are unsupported!</p></li>
-<li><p>CPU: At least 8 cores
-* We will be running the base station and the user on one system, so ideally more cores is better.</p></li>
+<li><p>Operating System: Ubuntu 24.04 LTS (x86, 64-bit)</p>
+<ul>
+<li><p>ARM devices such as MacBook M1 (Apple silicon) are unsupported!</p></li>
+</ul>
+</li>
+<li><p>CPU: At least 8 cores</p>
+<ul>
+<li><p>We will be running the base station and the user on one system, so ideally more cores is better.</p></li>
+</ul>
+</li>
 <li><p>RAM: 32GB</p></li>
 </ul>
 </section>
 <section id="install-dependencies">
-<h3>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading"></a></h3>
+<h2>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>vim<span class="w"> </span>tree<span class="w"> </span>net-tools<span class="w"> </span>libsctp-dev<span class="w"> </span>python3.8<span class="w"> </span>cmake-curses-gui<span class="w"> </span>libpcre2-dev<span class="w"> </span>python-dev<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>libfftw3-dev<span class="w"> </span>libmbedtls-dev<span class="w"> </span>libboost-program-options-dev<span class="w"> </span>libconfig++-dev<span class="w"> </span>libtool<span class="w"> </span>autoconf<span class="w"> </span>python3-pip<span class="w"> </span>curl<span class="w"> </span>bison<span class="w"> </span>flex<span class="w"> </span>iperf<span class="w"> </span>unzip
 </pre></div>
 </div>
 <section id="install-swig-4-1">
-<h4>Install Swig 4.1<a class="headerlink" href="#install-swig-4-1" title="Link to this heading"></a></h4>
+<h3>Install Swig 4.1<a class="headerlink" href="#install-swig-4-1" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/swig/swig.git
 <span class="nb">cd</span><span class="w"> </span>swig
 git<span class="w"> </span>checkout<span class="w"> </span>release-4.1
@@ -128,7 +166,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 </div>
 </section>
 <section id="check-gcc-version-gcc-10-gcc-12-or-gcc-13">
-<h4>Check GCC Version (gcc-10, gcc-12, or gcc-13)<a class="headerlink" href="#check-gcc-version-gcc-10-gcc-12-or-gcc-13" title="Link to this heading"></a></h4>
+<h3>Check GCC Version (gcc-10, gcc-12, or gcc-13)<a class="headerlink" href="#check-gcc-version-gcc-10-gcc-12-or-gcc-13" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>--version
 </pre></div>
 </div>
@@ -138,7 +176,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 </div>
 </section>
 <section id="install-docker-compose">
-<h4>Install Docker Compose<a class="headerlink" href="#install-docker-compose" title="Link to this heading"></a></h4>
+<h3>Install Docker Compose<a class="headerlink" href="#install-docker-compose" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>putty<span class="w"> </span>ca-certificates<span class="w"> </span>gnupg
 sudo<span class="w"> </span>install<span class="w"> </span>-m<span class="w"> </span><span class="m">0755</span><span class="w"> </span>-d<span class="w"> </span>/etc/apt/keyrings
 curl<span class="w"> </span>-fsSL<span class="w"> </span>https://download.docker.com/linux/ubuntu/gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/etc/apt/keyrings/docker.gpg
@@ -159,13 +197,46 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 </section>
 </section>
 </section>
-<section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h2>
+<section id="session-2-oai-installation">
+<h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
+<p>Open RAN (Radio Access Network) is a virtualized, disaggregated design paradigm for 5G/6G cellular networks.
+It refers to the concept of a cellular network that is built on open interfaces and modular components.</p>
+<p>Open RAN is important because it…
+* enables networks built from components by multiple vendors, replacing the current proprietary systems belonging to each vendor and mobile carrier
+* allows vendors to share physical and cloud resources in the same cell tower
+* is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.</p>
+<p>O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
+“<cite>O-RAN ALLIANCE’s mission &lt;https://www.o-ran.org/about&gt;</cite> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
+<ul>
+<li><p>Founded by AT&amp;T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018</p></li>
+<li><p>Based on two core principles: Openness, Intelligence</p></li>
+<li><p>Flexibility by design</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Open interfaces and APIs</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>Thare are various open-source software solutions built upon the 5G and O-RAN standards.
+The one we will use in this training is OpenAirInterface or OAI, which is a software stack providing the components needed for an operational
+radio access network purely implemented in software.</p>
+<p>The major components are:</p>
+<ul class="simple">
+<li><p>The 5G core network</p></li>
+<li><p>The gNB / gNodeB / base station (BS)</p>
+<ul>
+<li><p>In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),
+where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.</p></li>
+</ul>
+</li>
+<li><p>The user equipment (UE)</p></li>
+</ul>
 <section id="setup-oai-5g-core-network">
-<span id="setup-cn"></span><h3>Setup OAI 5G Core Network<a class="headerlink" href="#setup-oai-5g-core-network" title="Link to this heading"></a></h3>
+<span id="setup-cn"></span><h2>Setup OAI 5G Core Network<a class="headerlink" href="#setup-oai-5g-core-network" title="Link to this heading"></a></h2>
 <p>In this demo, we will employ the Core Network solution provided by Open Air Interface. This solution deploys network functions as docker containers. The CN components can be customized according to experimental requirements by modifying the configuration files. However, for the purposes of this tutorial we retain the default functionality.</p>
 <section id="get-core-network-configuration-files-and-docker-images">
-<h4>Get Core Network Configuration files and docker images<a class="headerlink" href="#get-core-network-configuration-files-and-docker-images" title="Link to this heading"></a></h4>
+<h3>Get Core Network Configuration files and docker images<a class="headerlink" href="#get-core-network-configuration-files-and-docker-images" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>
 wget<span class="w"> </span>-O<span class="w"> </span>~/oai-cn5g.zip<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path<span class="o">=</span>doc/tutorial_resources/oai-cn5g
 unzip<span class="w"> </span>~/oai-cn5g.zip
@@ -177,7 +248,7 @@ sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"
 </div>
 </section>
 <section id="test-the-deployment-of-core-network">
-<h4>Test the deployment of Core Network<a class="headerlink" href="#test-the-deployment-of-core-network" title="Link to this heading"></a></h4>
+<h3>Test the deployment of Core Network<a class="headerlink" href="#test-the-deployment-of-core-network" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 </pre></div>
 </div>
@@ -196,7 +267,7 @@ In that mode, pressing Ctrl+C will stop all containers!</p>
 </section>
 </section>
 <section id="setup-oai-radio-access-network-and-ue">
-<span id="setup-ran"></span><h3>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-oai-radio-access-network-and-ue" title="Link to this heading"></a></h3>
+<span id="setup-ran"></span><h2>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-oai-radio-access-network-and-ue" title="Link to this heading"></a></h2>
 <p>Clone the OAI 5G RAN repository from GitLab, and check out the <cite>develop</cite> branch.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g.git<span class="w"> </span>~/oai
 <span class="nb">cd</span><span class="w"> </span>~/oai
@@ -226,11 +297,14 @@ together on one system.</p>
 such as a USRP software-defined radio. For a USRP we would change this to <cite>-w USRP</cite>.</p>
 </section>
 </section>
-</section>
 <section id="session-3-using-rfsimulator-with-oai">
 <h1>Session 3 - Using RFSimulator with OAI<a class="headerlink" href="#session-3-using-rfsimulator-with-oai" title="Link to this heading"></a></h1>
 <p>5G CN, gNodeB, OAI open-source overview</p>
 <p>How it works end to end with a RF Simulated OAI-gNodeB and OAI NR-UE</p>
+<section id="deploy-5g-network">
+<h2>Deploy 5G Network<a class="headerlink" href="#deploy-5g-network" title="Link to this heading"></a></h2>
+<section id="start-the-core-network">
+<h3>Start the Core Network<a class="headerlink" href="#start-the-core-network" title="Link to this heading"></a></h3>
 <p>In Terminal 1,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
 sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
@@ -241,19 +315,31 @@ sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
 </pre></div>
 </div>
+</section>
+<section id="start-the-gnb">
+<h3>Start the gNB<a class="headerlink" href="#start-the-gnb" title="Link to this heading"></a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">1</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
 sudo<span class="w"> </span>./nr-softmodem<span class="w"> </span>-O<span class="w"> </span>../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf<span class="w"> </span>--gNBs.<span class="o">[</span><span class="m">0</span><span class="o">]</span>.min_rxtxtime<span class="w"> </span><span class="m">6</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/gnb_initialization.png"><img alt="gNB Initialization" src="_images/gnb_initialization.png" style="width: 60%;" /></a>
+</section>
+<section id="start-the-ue">
+<h3>Start the UE<a class="headerlink" href="#start-the-ue" title="Link to this heading"></a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
 sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
 </pre></div>
 </div>
 <p>How to perform traffic tests</p>
-<p id="exch-trf">For uplink ping - UE to network</p>
+</section>
+</section>
+<section id="exchange-traffic-between-network-and-ue">
+<span id="exch-trf"></span><h2>Exchange traffic between Network and UE<a class="headerlink" href="#exchange-traffic-between-network-and-ue" title="Link to this heading"></a></h2>
+<section id="streaming-traffic-using-ping">
+<h3>Streaming Traffic using Ping<a class="headerlink" href="#streaming-traffic-using-ping" title="Link to this heading"></a></h3>
+<p>For uplink ping - UE to network</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-I<span class="w"> </span>oaitun_ue1
 </pre></div>
@@ -263,6 +349,9 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </pre></div>
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">ctrl+c</span></code> or <code class="docutils literal notranslate"><span class="pre">ctrl+d</span></code> to stop/exit the ping processes.</p>
+</section>
+<section id="streaming-traffic-with-iperf">
+<h3>Streaming Traffic with iPerf<a class="headerlink" href="#streaming-traffic-with-iperf" title="Link to this heading"></a></h3>
 <p>Downlink iPerf</p>
 <p>Find out the IP address of the UE by running <code class="docutils literal notranslate"><span class="pre">ifconfig</span></code> on the UE machine and check the IP address field of <code class="docutils literal notranslate"><span class="pre">oaitun_ue1</span></code> network Interface. Here we initialize an iperf server for UDP traffic.</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>,</p>
@@ -283,9 +372,35 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </pre></div>
 </div>
 </section>
+</section>
+</section>
 <section id="session-4-oai-installation-flexric">
 <h1>Session 4 - OAI Installation + FlexRIC<a class="headerlink" href="#session-4-oai-installation-flexric" title="Link to this heading"></a></h1>
-<p id="setup-ran-e2">Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
+<p>O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
+“<cite>O-RAN ALLIANCE’s mission &lt;https://www.o-ran.org/about&gt;</cite> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
+<ul>
+<li><p>Founded by AT&amp;T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018</p></li>
+<li><p>Based on two core principles: Openness, Intelligence</p></li>
+<li><p>Flexibility by design</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Open interfaces and APIs</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>RAN Intelligent Controllers (RICs)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Abstract the networks</p></li>
+<li><p>Allow telecom operators to implement custom control logic</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>For more information, refer to the presentation.</p>
+<section id="setup-ran-e2">
+<span id="id1"></span><h2>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-ran-e2" title="Link to this heading"></a></h2>
+<p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/openairinterface5G.git<span class="w"> </span>~/oai
 <span class="nb">cd</span><span class="w"> </span>~/oai
 git<span class="w"> </span>checkout<span class="w"> </span>oaic_workshop_2024_v1
@@ -294,7 +409,10 @@ git<span class="w"> </span>checkout<span class="w"> </span>oaic_workshop_2024_v1
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/oai_install.png"><img alt="OAI Installation" src="_images/oai_install.png" style="width: 60%;" /></a>
-<p id="setup-flexric">Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">beabdd07</span></code> commit.</p>
+</section>
+<section id="setup-flexric">
+<span id="id2"></span><h2>Setup FlexRIC<a class="headerlink" href="#setup-flexric" title="Link to this heading"></a></h2>
+<p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">beabdd07</span></code> commit.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/flexric.git<span class="w"> </span>~/flexric
 <span class="nb">cd</span><span class="w"> </span>~/flexric
 git<span class="w"> </span>checkout<span class="w"> </span>beabdd07
@@ -312,7 +430,12 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="flexric_make_inst.png"><img alt="Tmux cheatsheet" src="flexric_make_inst.png" style="width: 60%;" /></a>
-<p id="run-nw-e2">In Terminal 1,</p>
+</section>
+<section id="run-nw-e2">
+<span id="id3"></span><h2>Deploy 5G Network<a class="headerlink" href="#run-nw-e2" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>Start the Core Network<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>In Terminal 1,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
 sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 <span class="nb">cd</span><span class="w"> </span>~/
@@ -322,17 +445,26 @@ sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
 </pre></div>
 </div>
+</section>
+<section id="id5">
+<h3>Start the gNB<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">1</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
 sudo<span class="w"> </span>./nr-softmodem<span class="w"> </span>-O<span class="w"> </span>../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf<span class="w"> </span>--gNBs.<span class="o">[</span><span class="m">0</span><span class="o">]</span>.min_rxtxtime<span class="w"> </span><span class="m">6</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/gnb_initialization.png"><img alt="gNB Initialization" src="_images/gnb_initialization.png" style="width: 60%;" /></a>
+</section>
+<section id="id6">
+<h3>Start the UE<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
 sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
 </pre></div>
 </div>
+</section>
+<section id="start-the-near-rt-ric">
+<h3>Start the near-RT RIC<a class="headerlink" href="#start-the-near-rt-ric" title="Link to this heading"></a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">3</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/
 ./flexric/build/examples/ric/nearRT-RIC
@@ -340,7 +472,13 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </div>
 <a class="reference internal image-reference" href="near-rt-ric-initialization.png"><img alt="Near-RT RIC Initialization" src="near-rt-ric-initialization.png" style="width: 60%;" /></a>
 <a class="reference internal image-reference" href="e2_near-rt-ric-resp.png"><img alt="E2 Message reception and RAN function Accept" src="e2_near-rt-ric-resp.png" style="width: 60%;" /></a>
-<p id="id2">Uplink iperf</p>
+</section>
+</section>
+<section id="id7">
+<span id="id8"></span><h2>Exchange traffic between Network and UE<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>Streaming Traffic with iPerf<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>Uplink iperf</p>
 <p>On <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>, initialize the iperf server (metrics are printed every second) for TCP traffic run,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-s<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135
 </pre></div>
@@ -350,15 +488,22 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </pre></div>
 </div>
 </section>
+</section>
+</section>
 <section id="session-5-xapp-onboarding-deployment">
 <h1>Session 5 - xApp onboarding, deployment<a class="headerlink" href="#session-5-xapp-onboarding-deployment" title="Link to this heading"></a></h1>
 <p>This document describes how to write an xApp in Python, how to deploy it on the RIC platform, and how to use the xApp to communicate with the RAN.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
 <p>An xApp is simply an application that is deployed to the <strong>near-real-time</strong> RAN Intelligent Controller (RIC) and is capable of communicating to the RAN.
-(Note that there is also a <strong>non-real-time</strong> RIC; applications stored in the non-real-time RIC are called rApps instead.)
 An xApp can be developed in any programming language, but to be O-RAN compliant, it needs to be able to communicate over the E2 interface to E2 nodes.
 An E2 Node refers to a component of the RAN that can interface with the RIC via E2, usually referring to the base station (DU/CU).
 Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.</p>
 <a class="reference internal image-reference" href="_images/e2like.png"><img alt="_images/e2like.png" src="_images/e2like.png" style="width: 452.0px; height: 201.0px;" /></a>
+<p>There is also a <strong>non-real-time</strong> RIC; applications stored in the non-real-time RIC are called rApps instead.
+Near-real-time applications are defined as running within 10ms to 1 second, while a non-real-time application takes longer than 1 second.</p>
+<p>Below is a comparison between xApps and rApps:</p>
+<a class="reference internal image-reference" href="xapp_oai_static/xapp_vs_rapp.png"><img alt="xapp_oai_static/xapp_vs_rapp.png" src="xapp_oai_static/xapp_vs_rapp.png" /></a>
 <p>To understand how an xApp works, first we must look at how an O-RAN network is implemented.
 The RAN Intelligent Controller (RIC) is capable of dynamically controlling the RAN.
 The near-RT RIC that we will use with OAI is called FlexRIC.</p>
@@ -368,7 +513,7 @@ for the application to start instantly. FlexRIC acts as a message broker between
 The xApps we will use are hosted on a <cite>single</cite> Docker container, but several microservices could make up a single xApp.</p>
 <a class="reference internal image-reference" href="_images/kubernetes.png"><img alt="_images/kubernetes.png" src="_images/kubernetes.png" style="width: 445.20000000000005px; height: 277.2px;" /></a>
 <p>For more information on Docker, see the <cite>Background on Docker, Kubernetes &amp; Helm</cite> section.</p>
-<p>The E2 interface is based on the O-RAN Alliance’s specifications.
+<p>The E2 interface is based on the O-RAN ALLIANCE’s specifications.
 Messages are encoded through the ASN.1 standard, which allows messages to be encoded in binary according to a specification file.
 ASN.1 encoding and decoding is implemented for many programming languages, allowing E2 and xApp specifications to be theoretically language-agnostic.</p>
 <p>xApps can define the contents of the data that they send and receive by writing an ASN.1 specification.
@@ -391,8 +536,8 @@ IndicationMessage ::= SEQUENCE {
 }
 </pre></div>
 </div>
-<p>The O-RAN specifications are available on the O-RAN Alliance’s website: <a class="reference external" href="https://specifications.o-ran.org/specifications">https://specifications.o-ran.org/specifications</a>
-Some examples of E2 service models which are standardized by the O-RAN Alliance include:</p>
+<p>The O-RAN specifications are available on the O-RAN ALLIANCE’s website: <a class="reference external" href="https://specifications.o-ran.org/specifications">https://specifications.o-ran.org/specifications</a>
+Some examples of E2 service models which are standardized by the O-RAN ALLIANCE include:</p>
 <ul class="simple">
 <li><p>E2SM-KPM, which allows the RAN to send key performance metrics to an xApp,</p></li>
 </ul>
@@ -402,7 +547,12 @@ Some examples of E2 service models which are standardized by the O-RAN Alliance 
 <p>xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
 xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.</p>
 <a class="reference internal image-reference" href="xapp_oai_static/subscription.png"><img alt="xapp_oai_static/subscription.png" src="xapp_oai_static/subscription.png" /></a>
-<p id="run-xapp">First we will run the KPIMON xApp and observe some metrics. This xApp is based on the <code class="docutils literal notranslate"><span class="pre">E2SM-KPM</span> <span class="pre">(Key</span> <span class="pre">Performance</span> <span class="pre">Metrics)</span></code> service model. It is responsible for collecting metrics collected by the RAN and forwarding it to relevant xApps to help in RAN control.
+</section>
+<section id="run-xapps">
+<span id="run-xapp"></span><h2>Run xApps<a class="headerlink" href="#run-xapps" title="Link to this heading"></a></h2>
+<section id="kpimon-xapp">
+<h3>KPIMON xApp<a class="headerlink" href="#kpimon-xapp" title="Link to this heading"></a></h3>
+<p>First we will run the KPIMON xApp and observe some metrics. This xApp is based on the <code class="docutils literal notranslate"><span class="pre">E2SM-KPM</span> <span class="pre">(Key</span> <span class="pre">Performance</span> <span class="pre">Metrics)</span></code> service model. It is responsible for collecting metrics collected by the RAN and forwarding it to relevant xApps to help in RAN control.
 The KPM service model sends data from the RAN to the RIC, which we call an indication message.
 When we want the RIC to control the RAN, we must send a control message from the xApp, but in this case, we only receive indication messages.</p>
 <p>Per O-RAN specifications, 5G measurements supported by KPM are specified in <strong>3GPP TS 28.552</strong>. Some of the metrics supported are <code class="docutils literal notranslate"><span class="pre">DRB.PdcpSduVolumeDL</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.PdcpSduVolumeUL</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.RlcSduDelayDl</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.UEThpDl</span></code>, <code class="docutils literal notranslate"><span class="pre">DRB.UEThpUl</span></code>, <code class="docutils literal notranslate"><span class="pre">RRU.PrbTotDl</span></code>, <code class="docutils literal notranslate"><span class="pre">RRU.PrbTotUl</span></code>.
@@ -413,6 +563,9 @@ In this implementation <strong>Report Style 4 (Section 7.4.5)</strong> has been 
 </pre></div>
 </div>
 <p>The output should look like this:</p>
+</section>
+<section id="behind-the-scenes">
+<h3>Behind the scenes<a class="headerlink" href="#behind-the-scenes" title="Link to this heading"></a></h3>
 <p>FlexRIC supports writing xApps in C or Python.</p>
 <p>Writing an xApp in C is fairly simple. Looking at the KPIMON xApp:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
@@ -614,6 +767,9 @@ In this implementation <strong>Report Style 4 (Section 7.4.5)</strong> has been 
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="ran-control-rc-xapp">
+<h3>RAN Control (RC) xApp<a class="headerlink" href="#ran-control-rc-xapp" title="Link to this heading"></a></h3>
 <p>This xApp enables control of RAN services exposed by the RAN. The current implementation exposes RAN control function <code class="docutils literal notranslate"><span class="pre">QoS</span> <span class="pre">flow</span> <span class="pre">mapping</span> <span class="pre">configuration</span></code>. This version of the xApp supports <code class="docutils literal notranslate"><span class="pre">REPORT</span> <span class="pre">Service</span> <span class="pre">Style</span> <span class="pre">4</span></code> (UE Information - section 7.4.5) - aperiodic subscription for <code class="docutils literal notranslate"><span class="pre">UE</span> <span class="pre">RRC</span> <span class="pre">State</span> <span class="pre">Change</span></code> and <code class="docutils literal notranslate"><span class="pre">CONTROL</span> <span class="pre">Service</span> <span class="pre">Style</span> <span class="pre">1</span></code> (“Radio Bearer Control” - section 7.6.2) - “QoS flow mapping configuration” (e.g creating a new DRB).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/flexric
 ./build/examples/xApp/c/kpm_rc/xapp_kpm_rc
@@ -780,6 +936,8 @@ In this implementation <strong>Report Style 4 (Section 7.4.5)</strong> has been 
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+</section>
 </section>
 
 
