@@ -80,8 +80,11 @@ Background
 ==========
 
 Refer to the presentation (PIMRC slides 5-10)
+
 * 1G-5G timeline
+
 * Reference Cellular Architecture (RAN)
+
 * Evolution of RAN (vRAN and O-RAN)
 
 What is Open RAN?
@@ -91,8 +94,11 @@ Open RAN (Radio Access Network) is a virtualized, disaggregated design paradigm 
 It refers to the concept of a cellular network that is built on open interfaces and modular components.
 
 Open RAN is important because it...
+
 * enables networks built from components by multiple vendors, replacing the current proprietary systems belonging to each vendor and mobile carrier
+
 * allows vendors to share physical and cloud resources in the same cell tower
+
 * is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.
 
 What is O-RAN?
@@ -511,7 +517,7 @@ An E2 Node refers to a component of the RAN that can interface with the RIC via 
 Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.
 
 .. image:: xapp_oai_static/e2keyterminologies.png
-   :scale: 50%
+    :width: 60%
 
 There is also a **non-real-time** RIC; applications stored in the non-real-time RIC are called rApps instead.
 Near-real-time applications are defined as running within 10ms to 1 second, while a non-real-time application takes longer than 1 second.
@@ -519,17 +525,18 @@ Near-real-time applications are defined as running within 10ms to 1 second, whil
 Below is a comparison between xApps and rApps:
 
 .. image:: xapp_oai_static/xapp_vs_rapp.png
-   :scale: 50%
+    :width: 60%
 
 What problems in 5G networks can xApps can solve?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Spectrum sharing - Ensuring multiple networks on the same frequency do not interfere with each other
 
-    * Interference detection and mitigation - `detecting interference through performance metrics or spectrograms <https://ieeexplore.ieee.org/document/10356330>` and moving communications away from interfered frequencies
-    * Radar detection - in order to avoid interference between radar and 5G networks, see `SenseORAN <https://ieeexplore.ieee.org/document/10353027>`
+    * Interference detection and mitigation - `detecting interference through performance metrics or spectrograms <https://ieeexplore.ieee.org/document/10356330>`_ and moving communications away from interfered frequencies
+    * Radar detection - in order to avoid interference between radar and 5G networks, see `SenseORAN <https://ieeexplore.ieee.org/document/10353027>`_
 
 * Anomaly detection - identifying users in the network which maliciously disrupt the RAN or other xApps from working properly
+
 * Traffic steering - looking at user behavior and connecting them to different cells in the RAN for load balancing or energy saving
 
 
@@ -578,17 +585,19 @@ Some examples of E2 service models which are standardized by the O-RAN ALLIANCE 
 
 * E2SM-KPM, which allows the RAN to send key performance metrics to an xApp,
 such as the bitrate and error rate for each user
+
 * E2SM Cell Configuration and Control, which allows an xApp to control the RAN at the node and cell levels
+
 * E2SM RAN control, which allows an xApp to control the RAN at the UE and cell levels
 
 xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
 xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.
 
 .. image:: xapp_oai_static/e2subscription.png
-   :scale: 40%
+    :width: 60%
 
 .. image:: xapp_oai_static/e2subscription2.png
-   :scale: 40%
+    :width: 60%
 
 
 .. _run_xapp:
