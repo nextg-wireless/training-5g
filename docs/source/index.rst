@@ -9,11 +9,11 @@ System Requirements
 
 * Operating System: Ubuntu 24.04 LTS (x86, 64-bit)
 
-  * ARM devices such as MacBook M1 (Apple silicon) are unsupported!
+    * ARM devices such as MacBook M1 (Apple silicon) are unsupported!
 
 * CPU: At least 8 cores
 
-  * We will be running the base station and the user on one system, so ideally more cores is better.
+    * We will be running the base station and the user on one system, so ideally more cores is better.
 
 * RAM: 32GB
 
@@ -79,6 +79,11 @@ Session 2 - OAI Installation
 Background
 ==========
 
+Refer to the presentation (PIMRC slides 5-10)
+* 1G-5G timeline
+* Reference Cellular Architecture (RAN)
+* Evolution of RAN (vRAN and O-RAN)
+
 What is Open RAN?
 ~~~~~~~~~~~~~~~~~
 
@@ -96,14 +101,6 @@ What is O-RAN?
 O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research & academic institutions.
 "`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>` is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
 
-* Founded by AT&T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018
-
-* Based on two core principles: Openness, Intelligence
-
-* Flexibility by design
-
-    * Open interfaces and APIs
-
 
 What is OAI?
 ~~~~~~~~~~~~
@@ -118,7 +115,7 @@ The major components are:
 
 * The gNB / gNodeB / base station (BS)
 
-  * In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),
+    * In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),
     where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.
 
 * The user equipment (UE)
@@ -332,9 +329,9 @@ In ``terminal 5``, run
 
 	iperf -c 192.168.70.135 -i 1 -b 10M -B <ue_ip>
 
-======================================
-Session 4 - OAI Installation + FlexRIC
-======================================
+============================
+Session 4 - OAI Installation
+============================
 
 What is O-RAN?
 ~~~~~~~~~~~~~~
@@ -356,7 +353,7 @@ O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide communi
 
     * Allow telecom operators to implement custom control logic
 
-For more information, refer to the presentation.
+For more information, refer to the presentation (PIMRC slides 5-39)
 
 .. _Setup_RAN_E2:
 
@@ -376,6 +373,10 @@ Clone the OAI 5G RAN repository and checkout the ``oaic_workshop_2024_v1`` branc
 .. image:: oai_install.png
    :width: 60%
    :alt: OAI Installation
+
+============================
+Session 5 - FlexRIC Installation
+============================
 
 .. _Setup_FlexRIC:
 
@@ -498,10 +499,8 @@ In ``terminal 5``, run
 	iperf -c 192.168.70.135 -i 1 -b 10M -B <ue_ip>
 
 =======================================
-Session 5 - xApp onboarding, deployment
+Session 6 - xApp onboarding, deployment
 =======================================
-
-This document describes how to write an xApp in Python, how to deploy it on the RIC platform, and how to use the xApp to communicate with the RAN.
 
 Background
 ----------
@@ -511,7 +510,7 @@ An xApp can be developed in any programming language, but to be O-RAN compliant,
 An E2 Node refers to a component of the RAN that can interface with the RIC via E2, usually referring to the base station (DU/CU).
 Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.
 
-.. image:: xapp_oai_static/e2like.png
+.. image:: xapp_oai_static/e2keyterminologies.png
    :scale: 50%
 
 There is also a **non-real-time** RIC; applications stored in the non-real-time RIC are called rApps instead.
@@ -522,6 +521,20 @@ Below is a comparison between xApps and rApps:
 .. image:: xapp_oai_static/xapp_vs_rapp.png
    :scale: 50%
 
+What problems in 5G networks can xApps can solve?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Spectrum sharing - Ensuring multiple networks on the same frequency do not interfere with each other
+
+    * Interference detection and mitigation - `detecting interference through performance metrics or spectrograms <https://ieeexplore.ieee.org/document/10356330>` and moving communications away from interfered frequencies
+    * Radar detection - in order to avoid interference between radar and 5G networks, see `SenseORAN <https://ieeexplore.ieee.org/document/10353027>`
+
+* Anomaly detection - identifying users in the network which maliciously disrupt the RAN or other xApps from working properly
+* Traffic steering - looking at user behavior and connecting them to different cells in the RAN for load balancing or energy saving
+
+
+How do xApps work in the RIC?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To understand how an xApp works, first we must look at how an O-RAN network is implemented.
 The RAN Intelligent Controller (RIC) is capable of dynamically controlling the RAN.
@@ -529,13 +542,9 @@ The near-RT RIC that we will use with OAI is called FlexRIC.
 
 FlexRIC consists of a collection of microservices, which are small containerized programs.
 These containers are created and deployed using Docker, using an image that we prepare beforehand that consists of everything needed
-for the application to start instantly. FlexRIC acts as a message broker between xApps and E2 nodes.
+for the application to start instantly. FlexRIC acts as a message broker between xApps and E2 nodes by providing the `E2 termination`,
+the point at which all the xApps and E2 nodes connect to communicate with each other.
 The xApps we will use are hosted on a `single` Docker container, but several microservices could make up a single xApp.
-
-.. image:: xapp_oai_static/kubernetes.png
-   :scale: 40%
-
-For more information on Docker, see the `Background on Docker, Kubernetes & Helm` section.
 
 The E2 interface is based on the O-RAN ALLIANCE's specifications.
 Messages are encoded through the ASN.1 standard, which allows messages to be encoded in binary according to a specification file.
@@ -575,8 +584,12 @@ such as the bitrate and error rate for each user
 xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
 xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.
 
-.. image:: xapp_oai_static/subscription.png
+.. image:: xapp_oai_static/e2subscription.png
    :scale: 40%
+
+.. image:: xapp_oai_static/e2subscription2.png
+   :scale: 40%
+
 
 .. _run_xapp:
 
