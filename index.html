@@ -210,16 +210,20 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 </section>
 <section id="session-2-oai-installation">
 <h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
-<p>Refer to the presentation (PIMRC slides 5-10)
-* 1G-5G timeline
-* Reference Cellular Architecture (RAN)
-* Evolution of RAN (vRAN and O-RAN)</p>
+<p>Refer to the presentation (PIMRC slides 5-10)</p>
+<ul class="simple">
+<li><p>1G-5G timeline</p></li>
+<li><p>Reference Cellular Architecture (RAN)</p></li>
+<li><p>Evolution of RAN (vRAN and O-RAN)</p></li>
+</ul>
 <p>Open RAN (Radio Access Network) is a virtualized, disaggregated design paradigm for 5G/6G cellular networks.
 It refers to the concept of a cellular network that is built on open interfaces and modular components.</p>
-<p>Open RAN is important because it…
-* enables networks built from components by multiple vendors, replacing the current proprietary systems belonging to each vendor and mobile carrier
-* allows vendors to share physical and cloud resources in the same cell tower
-* is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.</p>
+<p>Open RAN is important because it…</p>
+<ul class="simple">
+<li><p>enables networks built from components by multiple vendors, replacing the current proprietary systems belonging to each vendor and mobile carrier</p></li>
+<li><p>allows vendors to share physical and cloud resources in the same cell tower</p></li>
+<li><p>is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.</p></li>
+</ul>
 <p>O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
 “<cite>O-RAN ALLIANCE’s mission &lt;https://www.o-ran.org/about&gt;</cite> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
 <p>Thare are various open-source software solutions built upon the 5G and O-RAN standards.
@@ -507,19 +511,19 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 An xApp can be developed in any programming language, but to be O-RAN compliant, it needs to be able to communicate over the E2 interface to E2 nodes.
 An E2 Node refers to a component of the RAN that can interface with the RIC via E2, usually referring to the base station (DU/CU).
 Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.</p>
-<a class="reference internal image-reference" href="_images/e2keyterminologies.png"><img alt="_images/e2keyterminologies.png" src="_images/e2keyterminologies.png" style="width: 801.0px; height: 347.0px;" /></a>
+<a class="reference internal image-reference" href="_images/e2keyterminologies.png"><img alt="_images/e2keyterminologies.png" src="_images/e2keyterminologies.png" style="width: 60%;" /></a>
 <p>There is also a <strong>non-real-time</strong> RIC; applications stored in the non-real-time RIC are called rApps instead.
 Near-real-time applications are defined as running within 10ms to 1 second, while a non-real-time application takes longer than 1 second.</p>
 <p>Below is a comparison between xApps and rApps:</p>
-<a class="reference internal image-reference" href="_images/xapp_vs_rapp.png"><img alt="_images/xapp_vs_rapp.png" src="_images/xapp_vs_rapp.png" style="width: 1490.0px; height: 760.0px;" /></a>
+<a class="reference internal image-reference" href="_images/xapp_vs_rapp.png"><img alt="_images/xapp_vs_rapp.png" src="_images/xapp_vs_rapp.png" style="width: 60%;" /></a>
 <section id="what-problems-in-5g-networks-can-xapps-can-solve">
 <h3>What problems in 5G networks can xApps can solve?<a class="headerlink" href="#what-problems-in-5g-networks-can-xapps-can-solve" title="Link to this heading"></a></h3>
 <ul>
 <li><p>Spectrum sharing - Ensuring multiple networks on the same frequency do not interfere with each other</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Interference detection and mitigation - <cite>detecting interference through performance metrics or spectrograms &lt;https://ieeexplore.ieee.org/document/10356330&gt;</cite> and moving communications away from interfered frequencies</p></li>
-<li><p>Radar detection - in order to avoid interference between radar and 5G networks, see <cite>SenseORAN &lt;https://ieeexplore.ieee.org/document/10353027&gt;</cite></p></li>
+<li><p>Interference detection and mitigation - <a class="reference external" href="https://ieeexplore.ieee.org/document/10356330">detecting interference through performance metrics or spectrograms</a> and moving communications away from interfered frequencies</p></li>
+<li><p>Radar detection - in order to avoid interference between radar and 5G networks, see <a class="reference external" href="https://ieeexplore.ieee.org/document/10353027">SenseORAN</a></p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -565,13 +569,15 @@ Some examples of E2 service models which are standardized by the O-RAN ALLIANCE 
 <ul class="simple">
 <li><p>E2SM-KPM, which allows the RAN to send key performance metrics to an xApp,</p></li>
 </ul>
-<p>such as the bitrate and error rate for each user
-* E2SM Cell Configuration and Control, which allows an xApp to control the RAN at the node and cell levels
-* E2SM RAN control, which allows an xApp to control the RAN at the UE and cell levels</p>
+<p>such as the bitrate and error rate for each user</p>
+<ul class="simple">
+<li><p>E2SM Cell Configuration and Control, which allows an xApp to control the RAN at the node and cell levels</p></li>
+<li><p>E2SM RAN control, which allows an xApp to control the RAN at the UE and cell levels</p></li>
+</ul>
 <p>xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
 xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.</p>
-<a class="reference internal image-reference" href="_images/e2subscription.png"><img alt="_images/e2subscription.png" src="_images/e2subscription.png" style="width: 1185.6000000000001px; height: 573.6px;" /></a>
-<a class="reference internal image-reference" href="_images/e2subscription2.png"><img alt="_images/e2subscription2.png" src="_images/e2subscription2.png" style="width: 1181.6000000000001px; height: 551.2px;" /></a>
+<a class="reference internal image-reference" href="_images/e2subscription.png"><img alt="_images/e2subscription.png" src="_images/e2subscription.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="_images/e2subscription2.png"><img alt="_images/e2subscription2.png" src="_images/e2subscription2.png" style="width: 60%;" /></a>
 </section>
 </section>
 <section id="run-xapps">
