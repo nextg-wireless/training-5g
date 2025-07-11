@@ -121,8 +121,7 @@ The major components are:
 
 * The gNB / gNodeB / base station (BS)
 
-    * In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),
-    where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.
+    * In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU), where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.
 
 * The user equipment (UE)
 
@@ -343,7 +342,7 @@ What is O-RAN?
 ~~~~~~~~~~~~~~
 
 O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research & academic institutions.
-"`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>` is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
+"`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>`_ is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
 
 * Founded by AT&T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018
 
@@ -530,14 +529,14 @@ Below is a comparison between xApps and rApps:
 What problems in 5G networks can xApps can solve?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Spectrum sharing - Ensuring multiple networks on the same frequency do not interfere with each other
+* **Spectrum sharing** - Ensuring multiple networks on the same frequency do not interfere with each other
 
-    * Interference detection and mitigation - `detecting interference through performance metrics or spectrograms <https://ieeexplore.ieee.org/document/10356330>`_ and moving communications away from interfered frequencies
-    * Radar detection - in order to avoid interference between radar and 5G networks, see `SenseORAN <https://ieeexplore.ieee.org/document/10353027>`_
+    * **Interference detection and mitigation** - `detecting interference through performance metrics or spectrograms <https://ieeexplore.ieee.org/document/10356330>`_ and moving communications away from interfered frequencies
+    * **Radar detection** - in order to avoid interference between radar and 5G networks, see `SenseORAN <https://ieeexplore.ieee.org/document/10353027>`_
 
-* Anomaly detection - identifying users in the network which maliciously disrupt the RAN or other xApps from working properly
+* **Anomaly detection** - identifying users in the network which maliciously disrupt the RAN or other xApps from working properly
 
-* Traffic steering - looking at user behavior and connecting them to different cells in the RAN for load balancing or energy saving
+* **Traffic steering** - looking at user behavior and connecting them to different cells in the RAN for load balancing or energy saving
 
 
 How do xApps work in the RIC?
