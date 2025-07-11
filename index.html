@@ -78,8 +78,11 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#session-4-oai-installation-flexric">Session 4 - OAI Installation + FlexRIC</a><ul>
+<li><a class="reference internal" href="#session-4-oai-installation">Session 4 - OAI Installation</a><ul>
 <li><a class="reference internal" href="#setup-ran-e2">Setup OAI Radio Access Network and UE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#session-5-flexric-installation">Session 5 - FlexRIC Installation</a><ul>
 <li><a class="reference internal" href="#setup-flexric">Setup FlexRIC</a></li>
 <li><a class="reference internal" href="#run-nw-e2">Deploy 5G Network</a><ul>
 <li><a class="reference internal" href="#id4">Start the Core Network</a></li>
@@ -94,8 +97,12 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#session-5-xapp-onboarding-deployment">Session 5 - xApp onboarding, deployment</a><ul>
-<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#session-6-xapp-onboarding-deployment">Session 6 - xApp onboarding, deployment</a><ul>
+<li><a class="reference internal" href="#background">Background</a><ul>
+<li><a class="reference internal" href="#what-problems-in-5g-networks-can-xapps-can-solve">What problems in 5G networks can xApps can solve?</a></li>
+<li><a class="reference internal" href="#how-do-xapps-work-in-the-ric">How do xApps work in the RIC?</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#run-xapps">Run xApps</a><ul>
 <li><a class="reference internal" href="#kpimon-xapp">KPIMON xApp</a></li>
 <li><a class="reference internal" href="#behind-the-scenes">Behind the scenes</a></li>
@@ -134,16 +141,20 @@
 <span id="xappoai"></span><h1>Session 1 - Setup Requirements<a class="headerlink" href="#session-1-setup-requirements" title="Link to this heading"></a></h1>
 <section id="system-requirements">
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p>Operating System: Ubuntu 24.04 LTS (x86, 64-bit)</p>
 <ul>
+<li><p>Operating System: Ubuntu 24.04 LTS (x86, 64-bit)</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>ARM devices such as MacBook M1 (Apple silicon) are unsupported!</p></li>
 </ul>
+</div></blockquote>
 </li>
 <li><p>CPU: At least 8 cores</p>
-<ul>
+<blockquote>
+<div><ul class="simple">
 <li><p>We will be running the base station and the user on one system, so ideally more cores is better.</p></li>
 </ul>
+</div></blockquote>
 </li>
 <li><p>RAM: 32GB</p></li>
 </ul>
@@ -199,6 +210,10 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 </section>
 <section id="session-2-oai-installation">
 <h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
+<p>Refer to the presentation (PIMRC slides 5-10)
+* 1G-5G timeline
+* Reference Cellular Architecture (RAN)
+* Evolution of RAN (vRAN and O-RAN)</p>
 <p>Open RAN (Radio Access Network) is a virtualized, disaggregated design paradigm for 5G/6G cellular networks.
 It refers to the concept of a cellular network that is built on open interfaces and modular components.</p>
 <p>Open RAN is important because it…
@@ -207,28 +222,19 @@ It refers to the concept of a cellular network that is built on open interfaces 
 * is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.</p>
 <p>O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
 “<cite>O-RAN ALLIANCE’s mission &lt;https://www.o-ran.org/about&gt;</cite> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
-<ul>
-<li><p>Founded by AT&amp;T, China Mobile, Deutsche Telekom, NTT DOCOMO and Orange in Feb 2018</p></li>
-<li><p>Based on two core principles: Openness, Intelligence</p></li>
-<li><p>Flexibility by design</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Open interfaces and APIs</p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
 <p>Thare are various open-source software solutions built upon the 5G and O-RAN standards.
 The one we will use in this training is OpenAirInterface or OAI, which is a software stack providing the components needed for an operational
 radio access network purely implemented in software.</p>
 <p>The major components are:</p>
-<ul class="simple">
+<ul>
 <li><p>The 5G core network</p></li>
 <li><p>The gNB / gNodeB / base station (BS)</p>
-<ul>
-<li><p>In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),
-where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.</p></li>
+<blockquote>
+<div><ul class="simple">
+<li><p>In O-RAN, the gNB can be split between the Centralized Unit (CU) and the Distributed Unit (DU),</p></li>
 </ul>
+<p>where the CU contains the higher-level layers of the network protocol stack and the DU contains the lower layers.</p>
+</div></blockquote>
 </li>
 <li><p>The user equipment (UE)</p></li>
 </ul>
@@ -374,8 +380,8 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </section>
 </section>
 </section>
-<section id="session-4-oai-installation-flexric">
-<h1>Session 4 - OAI Installation + FlexRIC<a class="headerlink" href="#session-4-oai-installation-flexric" title="Link to this heading"></a></h1>
+<section id="session-4-oai-installation">
+<h1>Session 4 - OAI Installation<a class="headerlink" href="#session-4-oai-installation" title="Link to this heading"></a></h1>
 <p>O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
 “<cite>O-RAN ALLIANCE’s mission &lt;https://www.o-ran.org/about&gt;</cite> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
 <ul>
@@ -397,7 +403,7 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </div></blockquote>
 </li>
 </ul>
-<p>For more information, refer to the presentation.</p>
+<p>For more information, refer to the presentation (PIMRC slides 5-39)</p>
 <section id="setup-ran-e2">
 <span id="id1"></span><h2>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-ran-e2" title="Link to this heading"></a></h2>
 <p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
@@ -410,6 +416,9 @@ git<span class="w"> </span>checkout<span class="w"> </span>oaic_workshop_2024_v1
 </div>
 <a class="reference internal image-reference" href="_images/oai_install.png"><img alt="OAI Installation" src="_images/oai_install.png" style="width: 60%;" /></a>
 </section>
+</section>
+<section id="session-5-flexric-installation">
+<h1>Session 5 - FlexRIC Installation<a class="headerlink" href="#session-5-flexric-installation" title="Link to this heading"></a></h1>
 <section id="setup-flexric">
 <span id="id2"></span><h2>Setup FlexRIC<a class="headerlink" href="#setup-flexric" title="Link to this heading"></a></h2>
 <p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">beabdd07</span></code> commit.</p>
@@ -490,29 +499,44 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </section>
 </section>
 </section>
-<section id="session-5-xapp-onboarding-deployment">
-<h1>Session 5 - xApp onboarding, deployment<a class="headerlink" href="#session-5-xapp-onboarding-deployment" title="Link to this heading"></a></h1>
-<p>This document describes how to write an xApp in Python, how to deploy it on the RIC platform, and how to use the xApp to communicate with the RAN.</p>
+<section id="session-6-xapp-onboarding-deployment">
+<h1>Session 6 - xApp onboarding, deployment<a class="headerlink" href="#session-6-xapp-onboarding-deployment" title="Link to this heading"></a></h1>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
 <p>An xApp is simply an application that is deployed to the <strong>near-real-time</strong> RAN Intelligent Controller (RIC) and is capable of communicating to the RAN.
 An xApp can be developed in any programming language, but to be O-RAN compliant, it needs to be able to communicate over the E2 interface to E2 nodes.
 An E2 Node refers to a component of the RAN that can interface with the RIC via E2, usually referring to the base station (DU/CU).
 Note that the user has no direct connection to the E2 interface; when we refer to the RAN in this context, we generally mean the base station.</p>
-<a class="reference internal image-reference" href="_images/e2like.png"><img alt="_images/e2like.png" src="_images/e2like.png" style="width: 452.0px; height: 201.0px;" /></a>
+<a class="reference internal image-reference" href="_images/e2keyterminologies.png"><img alt="_images/e2keyterminologies.png" src="_images/e2keyterminologies.png" style="width: 801.0px; height: 347.0px;" /></a>
 <p>There is also a <strong>non-real-time</strong> RIC; applications stored in the non-real-time RIC are called rApps instead.
 Near-real-time applications are defined as running within 10ms to 1 second, while a non-real-time application takes longer than 1 second.</p>
 <p>Below is a comparison between xApps and rApps:</p>
 <a class="reference internal image-reference" href="_images/xapp_vs_rapp.png"><img alt="_images/xapp_vs_rapp.png" src="_images/xapp_vs_rapp.png" style="width: 1490.0px; height: 760.0px;" /></a>
+<section id="what-problems-in-5g-networks-can-xapps-can-solve">
+<h3>What problems in 5G networks can xApps can solve?<a class="headerlink" href="#what-problems-in-5g-networks-can-xapps-can-solve" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Spectrum sharing - Ensuring multiple networks on the same frequency do not interfere with each other</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Interference detection and mitigation - <cite>detecting interference through performance metrics or spectrograms &lt;https://ieeexplore.ieee.org/document/10356330&gt;</cite> and moving communications away from interfered frequencies</p></li>
+<li><p>Radar detection - in order to avoid interference between radar and 5G networks, see <cite>SenseORAN &lt;https://ieeexplore.ieee.org/document/10353027&gt;</cite></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Anomaly detection - identifying users in the network which maliciously disrupt the RAN or other xApps from working properly</p></li>
+<li><p>Traffic steering - looking at user behavior and connecting them to different cells in the RAN for load balancing or energy saving</p></li>
+</ul>
+</section>
+<section id="how-do-xapps-work-in-the-ric">
+<h3>How do xApps work in the RIC?<a class="headerlink" href="#how-do-xapps-work-in-the-ric" title="Link to this heading"></a></h3>
 <p>To understand how an xApp works, first we must look at how an O-RAN network is implemented.
 The RAN Intelligent Controller (RIC) is capable of dynamically controlling the RAN.
 The near-RT RIC that we will use with OAI is called FlexRIC.</p>
 <p>FlexRIC consists of a collection of microservices, which are small containerized programs.
 These containers are created and deployed using Docker, using an image that we prepare beforehand that consists of everything needed
-for the application to start instantly. FlexRIC acts as a message broker between xApps and E2 nodes.
+for the application to start instantly. FlexRIC acts as a message broker between xApps and E2 nodes by providing the <cite>E2 termination</cite>,
+the point at which all the xApps and E2 nodes connect to communicate with each other.
 The xApps we will use are hosted on a <cite>single</cite> Docker container, but several microservices could make up a single xApp.</p>
-<a class="reference internal image-reference" href="_images/kubernetes.png"><img alt="_images/kubernetes.png" src="_images/kubernetes.png" style="width: 445.20000000000005px; height: 277.2px;" /></a>
-<p>For more information on Docker, see the <cite>Background on Docker, Kubernetes &amp; Helm</cite> section.</p>
 <p>The E2 interface is based on the O-RAN ALLIANCE’s specifications.
 Messages are encoded through the ASN.1 standard, which allows messages to be encoded in binary according to a specification file.
 ASN.1 encoding and decoding is implemented for many programming languages, allowing E2 and xApp specifications to be theoretically language-agnostic.</p>
@@ -546,7 +570,9 @@ Some examples of E2 service models which are standardized by the O-RAN ALLIANCE 
 * E2SM RAN control, which allows an xApp to control the RAN at the UE and cell levels</p>
 <p>xApps are persistent in the RIC and run continuously. Since the RIC can be connected to multiple RANs,
 xApps wait for base stations to connect. When connecting to the RIC, the RAN must subscribe to any xApps that it wants to communicate with.</p>
-<a class="reference internal image-reference" href="xapp_oai_static/subscription.png"><img alt="xapp_oai_static/subscription.png" src="xapp_oai_static/subscription.png" /></a>
+<a class="reference internal image-reference" href="_images/e2subscription.png"><img alt="_images/e2subscription.png" src="_images/e2subscription.png" style="width: 1185.6000000000001px; height: 573.6px;" /></a>
+<a class="reference internal image-reference" href="_images/e2subscription2.png"><img alt="_images/e2subscription2.png" src="_images/e2subscription2.png" style="width: 1181.6000000000001px; height: 551.2px;" /></a>
+</section>
 </section>
 <section id="run-xapps">
 <span id="run-xapp"></span><h2>Run xApps<a class="headerlink" href="#run-xapps" title="Link to this heading"></a></h2>
