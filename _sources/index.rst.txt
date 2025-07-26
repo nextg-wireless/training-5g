@@ -33,7 +33,7 @@ Install Dependencies
 
 .. code-block:: bash
 
-	sudo apt install -y git vim tree net-tools libsctp-dev python3 cmake-curses-gui libpcre2-dev build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libtool autoconf python3-pip curl bison flex iperf unzip
+    sudo apt install -y git vim tree net-tools libsctp-dev python3 cmake-curses-gui libpcre2-dev build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libtool autoconf python3-pip curl bison flex iperf unzip
 
 Install Swig 4.1
 ~~~~~~~~~~~~~~~~
@@ -41,20 +41,20 @@ Install Swig 4.1
 .. code-block:: bash
 
     cd ~
-	git clone https://github.com/swig/swig.git
-	cd swig
-	git checkout release-4.1
-	./autogen.sh
-	./configure --prefix=/usr/
-	make -j`nproc`
-	sudo make install
+    git clone https://github.com/swig/swig.git
+    cd swig
+    git checkout release-4.1
+    ./autogen.sh
+    ./configure --prefix=/usr/
+    make -j`nproc`
+    sudo make install
 
 Check GCC Version (gcc-10, gcc-12, or gcc-13)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
-	gcc --version
+    gcc --version
 
 .. warning::
 
@@ -65,23 +65,23 @@ Install Docker Compose
 
 .. code-block:: bash
 
-	sudo apt install -y putty ca-certificates gnupg
-	sudo install -m 0755 -d /etc/apt/keyrings
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-	sudo chmod a+r /etc/apt/keyrings/docker.gpg
-	echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-	sudo apt update
-	sudo apt install -y docker.io docker-buildx-plugin docker-compose-plugin
+    sudo apt install -y putty ca-certificates gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt update
+    sudo apt install -y docker.io docker-buildx-plugin docker-compose-plugin
 
 Check docker compose version. The installed version should be ``v2.38.2``, as of the release of this guide.
 
 .. code-block:: bash
 
-	sudo docker compose version
+    sudo docker compose version
 
 .. note::
 
-	Optional Step: If you do not want to use sudo while executing docker compose commands, run ``sudo usermod -a -G docker $(whoami)`` and ``reboot`` the machine.
+    Optional Step: If you do not want to use sudo while executing docker compose commands, run ``sudo usermod -a -G docker $(whoami)`` and ``reboot`` the machine.
 
 
 ============================
@@ -95,13 +95,13 @@ Before going into the background, we will begin downloading the core network com
 
 .. code-block:: bash
 
-	cd ~
-	wget -O ~/oai-cn5g.zip https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path=doc/tutorial_resources/oai-cn5g
-	unzip ~/oai-cn5g.zip
-	mv ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g ~/oai-cn5g
-	rm -r ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g ~/oai-cn5g.zip
-	cd ~/oai-cn5g
-	sudo docker compose pull
+    cd ~
+    wget -O ~/oai-cn5g.zip https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path=doc/tutorial_resources/oai-cn5g
+    unzip ~/oai-cn5g.zip
+    mv ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g ~/oai-cn5g
+    rm -r ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g ~/oai-cn5g.zip
+    cd ~/oai-cn5g
+    sudo docker compose pull
 
 
 Background
@@ -171,7 +171,7 @@ Test the deployment of Core Network
 
 .. code-block:: bash
 
-	sudo docker compose up -d
+    sudo docker compose up -d
 
 .. image:: oai_cn_start.png
    :width: 60%
@@ -181,7 +181,7 @@ Verify that all the 10 containers are deployed and ``healthy``.
 
 .. code-block:: bash
 
-	sudo docker ps -a
+    sudo docker ps -a
 
 .. image:: oai_cn_verify.png
    :width: 60%
@@ -191,7 +191,7 @@ Turn the core network off. We will start it again later when the rest of the net
 
 .. code-block:: bash
 
-	sudo docker compose down
+    sudo docker compose down
 
 If you prefer seeing real-time container logs streaming to your terminal, run the docker compose command without the -d flag.
 In that mode, pressing Ctrl+C will stop all containers!
@@ -205,16 +205,16 @@ Clone the OAI 5G RAN repository from GitLab, and check out the `develop` branch.
 
 .. code-block:: bash
 
-	git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git ~/oai
-	cd ~/oai
-	git checkout develop
+    git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git ~/oai
+    cd ~/oai
+    git checkout develop
 
 Install OAI dependencies:
 
 .. code-block:: bash
 
-	cd ~/oai/cmake_targets/
-	sudo ./build_oai -I -w SIMU --gNB --nrUE --build-e2 --ninja
+    cd ~/oai/cmake_targets/
+    sudo ./build_oai -I -w SIMU --gNB --nrUE --build-e2 --ninja
 
 This installs a couple important packages required by OAI gNB and UE, including libsctp-dev, libtool, SIMDE and most importantly, ASN.1.
 The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.
@@ -249,17 +249,17 @@ Clone the OAI 5G RAN repository and checkout the ``beabdd07`` commit.
 
 .. code-block:: bash
 
-	git clone https://github.com/openaicellular/flexric.git ~/flexric
-	cd ~/flexric
-	git checkout beabdd07
+    git clone https://github.com/openaicellular/flexric.git ~/flexric
+    cd ~/flexric
+    git checkout beabdd07
 
 Build the flexRIC module.
 
 .. code-block:: bash
 
-	mkdir build
-	cd build
-	cmake ../
+    mkdir build
+    cd build
+    cmake ../
 
 .. image:: flexric_cmake.png
    :width: 60%
@@ -267,8 +267,8 @@ Build the flexRIC module.
 
 .. code-block:: bash
 
-	make -j`nproc`
-	sudo make install
+    make -j`nproc`
+    sudo make install
 
 ======================================
 Session 3 - Using RFSimulator with OAI
@@ -283,8 +283,8 @@ In ``terminal 1``,
 
 .. code-block:: bash
 
-	cd ~/oai-cn5g
-	sudo docker compose up
+    cd ~/oai-cn5g
+    sudo docker compose up
 
 Start the gNB
 ~~~~~~~~~~~~~
@@ -293,8 +293,8 @@ In ``terminal 2``,
 
 .. code-block:: bash
 
-	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --rfsim --sa
+    cd ~/oai/cmake_targets/ran_build/build
+    sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --rfsim --sa
 
 .. image:: xapp_oai_static/oai_gnb.png
    :width: 60%
@@ -302,7 +302,7 @@ In ``terminal 2``,
 
 .. note::
 
-	Although the configuration is written for the USRP B210, we have added the ``--rfsim`` argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.
+    Although the configuration is written for the USRP B210, we have added the ``--rfsim`` argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.
 
 Start the UE
 ~~~~~~~~~~~~
@@ -311,8 +311,8 @@ In ``terminal 3``,
 
 .. code-block:: bash
 
-	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
+    cd ~/oai/cmake_targets/ran_build/build
+    sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
 
 .. image:: xapp_oai_static/oai_ue.png
    :width: 60%
@@ -320,7 +320,7 @@ In ``terminal 3``,
 
 .. note::
 
-	Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
+    Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
 
 .. _exch_trf:
 
@@ -336,13 +336,13 @@ In ``terminal 4``,
 
 .. code-block:: bash
 
-	ping 192.168.70.135 -I oaitun_ue1
+    ping 192.168.70.135 -I oaitun_ue1
 
 For Downlink ping - Network to UE
 
 .. code-block:: bash
 
-	sudo docker exec -it oai-ext-dn ping <ue_ip>
+    sudo docker exec -it oai-ext-dn ping <ue_ip>
 
 .. note::
 
@@ -361,13 +361,13 @@ In ``terminal 4``,
 
 .. code-block:: bash
 
-	iperf -s -u -i 1 -B <ue_ip>
+    iperf -s -u -i 1 -B <ue_ip>
 
 The below command generates UDP traffic continuously at the rate of 10Mbps from the Core network. In ``terminal 5``,
 
 .. code-block:: bash
 
-	sudo docker exec -it oai-ext-dn iperf -u -t 0 -i 1 -fk -B 192.168.70.135 -b 10M -c <ue_ip>
+    sudo docker exec -it oai-ext-dn iperf -u -t 0 -i 1 -fk -B 192.168.70.135 -b 10M -c <ue_ip>
 
 Uplink iperf
 
@@ -375,13 +375,13 @@ On ``terminal 4``, initialize the iperf server (metrics are printed every second
 
 .. code-block:: bash
 
-	sudo docker exec -it oai-ext-dn iperf -s -i 1 -fk -B 192.168.70.135
+    sudo docker exec -it oai-ext-dn iperf -s -i 1 -fk -B 192.168.70.135
 
 In ``terminal 5``, run
 
 .. code-block:: bash
 
-	iperf -c 192.168.70.135 -i 1 -b 10M -t 0 -B <ue_ip>
+    iperf -c 192.168.70.135 -i 1 -b 10M -t 0 -B <ue_ip>
 
 .. note::
 
@@ -432,8 +432,8 @@ In ``terminal 1``,
 
 .. code-block:: bash
 
-	cd ~/oai-cn5g
-	sudo docker compose up
+    cd ~/oai-cn5g
+    sudo docker compose up
 
 Start the gNB
 ~~~~~~~~~~~~~
@@ -442,8 +442,8 @@ In ``terminal 2``,
 
 .. code-block:: bash
 
-	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --rfsim --sa
+    cd ~/oai/cmake_targets/ran_build/build
+    sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --rfsim --sa
 
 .. image:: gnb_initialization.png
    :width: 60%
@@ -451,7 +451,7 @@ In ``terminal 2``,
 
 .. note::
 
-	Although the configuration is written for the USRP B210, we have added the ``--rfsim`` argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.
+    Although the configuration is written for the USRP B210, we have added the ``--rfsim`` argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.
 
 
 Start the UE
@@ -461,8 +461,8 @@ In ``terminal 3``,
 
 .. code-block:: bash
 
-	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
+    cd ~/oai/cmake_targets/ran_build/build
+    sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
 
 .. image:: xapp_oai_static/oai_ue.png
    :width: 60%
@@ -470,7 +470,7 @@ In ``terminal 3``,
 
 .. note::
 
-	Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
+    Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
 
 
 Start the near-RT RIC
@@ -480,8 +480,8 @@ In ``terminal 3``,
 
 .. code-block:: bash
 
-	cd ~/
-	./flexric/build/examples/ric/nearRT-RIC
+    cd ~/
+    ./flexric/build/examples/ric/nearRT-RIC
 
 .. image:: near-rt-ric-initialization.png
    :width: 60%
@@ -500,13 +500,13 @@ On ``terminal 4``, initialize the iperf server (metrics are printed every second
 
 .. code-block:: bash
 
-	sudo docker exec -it oai-ext-dn iperf -s -i 1 -fk -B 192.168.70.135
+    sudo docker exec -it oai-ext-dn iperf -s -i 1 -fk -B 192.168.70.135
 
 In ``terminal 5``, run
 
 .. code-block:: bash
 
-	iperf -c 192.168.70.135 -i 1 -b 10M -t 0 -B <ue_ip>
+    iperf -c 192.168.70.135 -i 1 -b 10M -t 0 -B <ue_ip>
 
 .. note::
     
@@ -628,8 +628,8 @@ In a new Terminal, run
 
 .. code-block:: bash
 
-	cd ~/flexric
-	./build/examples/xApp/c/monitor/xapp_kpm_moni
+    cd ~/flexric
+    ./build/examples/xApp/c/monitor/xapp_kpm_moni
 
 The output should look like this:
 
@@ -860,8 +860,8 @@ This xApp enables control of RAN services exposed by the RAN. The current implem
 
 .. code-block:: bash
 
-	cd ~/flexric
-	./build/examples/xApp/c/kpm_rc/xapp_kpm_rc
+    cd ~/flexric
+    ./build/examples/xApp/c/kpm_rc/xapp_kpm_rc
 
 
 If we observe the C code:
@@ -1069,4 +1069,4 @@ As such, we need to download the compatible USRP firmware images to our system.
 Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.
 
 
-*Documentation written by Nathan Stephenson and supported by NextG Wireless Lab @ NC State and AuresTech. Some resources for this website are based off of or taken from the `Open AI Cellular repository <https://github.com/openaicellular/oaic>`_*
+*Documentation written by Nathan Stephenson and supported by NextG Wireless Lab @ NC State and AuresTech. Some resources for this website are based off of or taken from the* `Open AI Cellular repository <https://github.com/openaicellular/oaic>`_
