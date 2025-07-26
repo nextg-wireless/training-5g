@@ -1,5 +1,12 @@
 .. _xappoai:
 
+**O-RAN 5G Training: NextG Lab @ NC State and AuresTech**
+
+.. image:: nextgwireless.png
+    :width: 40%
+.. image:: aurestech.jpg
+    :width: 40%
+
 ==============================
 Session 1 - Setup Requirements
 ==============================
@@ -11,30 +18,35 @@ System Requirements
 
     * ARM devices such as MacBook M1 (Apple silicon) are unsupported!
 
-* CPU: At least 8 cores
+* CPU: Ideally 12+ cores
 
-    * We will be running the base station and the user on one system, so ideally more cores is better.
+    * We will be running the core network, base station and the user on one system, so more cores is better.
 
-* RAM: 32GB
+    * The system can technically operate on as low as 4 cores, but network throughput and reliability will be low.
+
+* RAM: 8GB
+
+    * Running everything at once takes about 4GB of RAM.
 
 Install Dependencies
 --------------------
 
 .. code-block:: bash
 
-	sudo apt install git vim tree net-tools libsctp-dev python3.8 cmake-curses-gui libpcre2-dev python-dev build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libtool autoconf python3-pip curl bison flex iperf unzip
+	sudo apt install -y git vim tree net-tools libsctp-dev python3 cmake-curses-gui libpcre2-dev build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libtool autoconf python3-pip curl bison flex iperf unzip
 
 Install Swig 4.1
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
+    cd ~
 	git clone https://github.com/swig/swig.git
 	cd swig
 	git checkout release-4.1
 	./autogen.sh
 	./configure --prefix=/usr/
-	make -j8
+	make -j`nproc`
 	sudo make install
 
 Check GCC Version (gcc-10, gcc-12, or gcc-13)
@@ -58,10 +70,10 @@ Install Docker Compose
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 	sudo chmod a+r /etc/apt/keyrings/docker.gpg
 	echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-	sudo apt-get update
-	sudo apt install -y docker-buildx-plugin docker-compose-plugin
+	sudo apt update
+	sudo apt install -y docker.io docker-buildx-plugin docker-compose-plugin
 
-Check docker compose version. The installed version should be ``v2.29``.
+Check docker compose version. The installed version should be ``v2.38.2``, as of the release of this guide.
 
 .. code-block:: bash
 
@@ -75,6 +87,22 @@ Check docker compose version. The installed version should be ``v2.29``.
 ============================
 Session 2 - OAI Installation
 ============================
+
+Get Core Network configuration files and Docker images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before going into the background, we will begin downloading the core network components, which may take some time. Run the following commands:
+
+.. code-block:: bash
+
+	cd ~
+	wget -O ~/oai-cn5g.zip https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path=doc/tutorial_resources/oai-cn5g
+	unzip ~/oai-cn5g.zip
+	mv ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g ~/oai-cn5g
+	rm -r ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g ~/oai-cn5g.zip
+	cd ~/oai-cn5g
+	sudo docker compose pull
+
 
 Background
 ==========
@@ -105,7 +133,7 @@ What is O-RAN?
 ~~~~~~~~~~~~~~
 
 O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research & academic institutions.
-"`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>` is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
+"`O-RAN ALLIANCE's mission <https://www.o-ran.org/about>`_ is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks."
 
 
 What is OAI?
@@ -133,21 +161,10 @@ Setup
 Setup OAI 5G Core Network
 -------------------------
 
-In this demo, we will employ the Core Network solution provided by Open Air Interface. This solution deploys network functions as docker containers. The CN components can be customized according to experimental requirements by modifying the configuration files. However, for the purposes of this tutorial we retain the default functionality.
+In this demo, we will employ the Core Network solution provided by OpenAirInterface. This solution deploys network functions as Docker containers. The CN components can be customized according to experimental requirements by modifying the configuration files. However, for the purposes of this tutorial we retain the default functionality.
 
+Before the background section we began downloading the Docker images for the core network services.
 
-Get Core Network Configuration files and docker images
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-	cd
-	wget -O ~/oai-cn5g.zip https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path=doc/tutorial_resources/oai-cn5g
-	unzip ~/oai-cn5g.zip
-	mv ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g ~/oai-cn5g
-	rm -r ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g ~/oai-cn5g.zip
-	cd ~/oai-cn5g
-	sudo docker compose pull
 
 Test the deployment of Core Network
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,7 +187,7 @@ Verify that all the 10 containers are deployed and ``healthy``.
    :width: 60%
    :alt: OAI CN Deployment Verification
 
-Turn the core network off.
+Turn the core network off. We will start it again later when the rest of the network is ready.
 
 .. code-block:: bash
 
@@ -201,7 +218,6 @@ Install OAI dependencies:
 
 This installs a couple important packages required by OAI gNB and UE, including libsctp-dev, libtool, SIMDE and most importantly, ASN.1.
 The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.
-See parts of the logs for this step below:
 
 Install nrscope dependencies: 
 
@@ -213,7 +229,7 @@ Next, we can build the binaries for the OAI base station (gNB) and the OAI user 
 
 .. code-block:: bash
 
-    cd ~/openairinterface5g/cmake_targets 
+    cd ~/oai/cmake_targets 
     sudo ./build_oai -w SIMU --ninja --nrUE --gNB --build-lib "nrscope" -C 
 
 In a real world system, the core, gNB, and UE would be located on separate systems, but for simplicity we will run everything
@@ -222,60 +238,89 @@ together on one system.
 Note that we compile with the `-w SIMU` option which means that we want to use a simulated radio instead of a physical radio
 such as a USRP software-defined radio. For a USRP we would change this to `-w USRP`.
 
+.. _Setup_FlexRIC:
+
+Setup FlexRIC
+-------------
+
+We also need to install the component FlexRIC, which we will use in a later session.
+
+Clone the OAI 5G RAN repository and checkout the ``beabdd07`` commit.
+
+.. code-block:: bash
+
+	git clone https://github.com/openaicellular/flexric.git ~/flexric
+	cd ~/flexric
+	git checkout beabdd07
+
+Build the flexRIC module.
+
+.. code-block:: bash
+
+	mkdir build
+	cd build
+	cmake ../
+
+.. image:: flexric_cmake.png
+   :width: 60%
+   :alt: CMake Build of flexRIC module
+
+.. code-block:: bash
+
+	make -j`nproc`
+	sudo make install
+
 ======================================
 Session 3 - Using RFSimulator with OAI
 ======================================
-
-5G CN, gNodeB, OAI open-source overview 
-
-
-How it works end to end with a RF Simulated OAI-gNodeB and OAI NR-UE 
 
 Deploy 5G Network
 -----------------
 
 Start the Core Network
 ~~~~~~~~~~~~~~~~~~~~~~
-In Terminal 1,
+In ``terminal 1``,
 
 .. code-block:: bash
 
 	cd ~/oai-cn5g
-	sudo docker compose up -d
-	cd ~/
-
-Check if the Core Network is up and running
-
-.. code-block:: bash
-
-	sudo docker ps -a
+	sudo docker compose up
 
 Start the gNB
 ~~~~~~~~~~~~~
-
-In ``Terminal 1``,
-
-.. code-block:: bash
-
-	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --rfsim --sa
-
-.. image:: gnb_initialization.png
-   :width: 60%
-   :alt: gNB Initialization
-
-Start the UE
-~~~~~~~~~~~~
 
 In ``terminal 2``,
 
 .. code-block:: bash
 
 	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --sa --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
+	sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --rfsim --sa
 
+.. image:: oai_gnb.png
+   :width: 60%
+   :alt: gNB Initialization
 
-How to perform traffic tests 
+.. note::
+
+	Although the configuration is written for the USRP B210, we have added the ``--rfsim`` argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.
+
+Start the UE
+~~~~~~~~~~~~
+
+In ``terminal 3``,
+
+.. code-block:: bash
+
+	cd ~/oai/cmake_targets/ran_build/build
+	sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
+
+.. image:: oai_ue.png
+   :width: 60%
+   :alt: UE Initialization
+
+.. note::
+
+	Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
 
 .. _exch_trf:
 
@@ -299,6 +344,10 @@ For Downlink ping - Network to UE
 
 	sudo docker exec -it oai-ext-dn ping <ue_ip>
 
+.. note::
+
+    Replace ``<ue_ip>`` with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2
+
 Use ``ctrl+c`` or ``ctrl+d`` to stop/exit the ping processes.
 
 Streaming Traffic with iPerf
@@ -314,11 +363,11 @@ In ``terminal 4``,
 
 	iperf -s -u -i 1 -B <ue_ip>
 
-The below command generates UDP traffic for 100 seconds, at the rate of 10Mbps from the Core network. In terminal 5,
+The below command generates UDP traffic continuously at the rate of 10Mbps from the Core network. In ``terminal 5``,
 
 .. code-block:: bash
 
-	sudo docker exec -it oai-ext-dn iperf -u -t 100 -i 1 -fk -B 192.168.70.135 -b 10M -c <ue_ip>
+	sudo docker exec -it oai-ext-dn iperf -u -t 0 -i 1 -fk -B 192.168.70.135 -b 10M -c <ue_ip>
 
 Uplink iperf
 
@@ -332,7 +381,11 @@ In ``terminal 5``, run
 
 .. code-block:: bash
 
-	iperf -c 192.168.70.135 -i 1 -b 10M -B <ue_ip>
+	iperf -c 192.168.70.135 -i 1 -b 10M -t 0 -B <ue_ip>
+
+.. note::
+
+    Replace ``<ue_ip>`` with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2
 
 ============================
 Session 4 - OAI Installation
@@ -360,62 +413,13 @@ O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide communi
 
 For more information, refer to the presentation (PIMRC slides 5-39)
 
-.. _Setup_RAN_E2:
+=================================
+Session 5 - FlexRIC Demonstration
+=================================
 
-Setup OAI Radio Access Network and UE
--------------------------------------
+Previously, we installed FlexRIC in the process of building and running OAI.
 
-Clone the OAI 5G RAN repository and checkout the ``oaic_workshop_2024_v1`` branch.
-
-.. code-block:: bash
-
-	git clone https://github.com/openaicellular/openairinterface5G.git ~/oai
-	cd ~/oai
-	git checkout oaic_workshop_2024_v1
-	cd ~/oai/cmake_targets/
-	./build_oai -I -w SIMU --gNB --nrUE --build-e2 --ninja
-
-.. image:: oai_install.png
-   :width: 60%
-   :alt: OAI Installation
-
-============================
-Session 5 - FlexRIC Installation
-============================
-
-.. _Setup_FlexRIC:
-
-Setup FlexRIC
--------------
-
-Clone the OAI 5G RAN repository and checkout the ``beabdd07`` commit.
-
-.. code-block:: bash
-
-	git clone https://github.com/openaicellular/flexric.git ~/flexric
-	cd ~/flexric
-	git checkout beabdd07
-
-Build the flexRIC module.
-
-.. code-block:: bash
-
-	mkdir build
-	cd build
-	cmake ../
-
-.. image:: flexric_cmake.png
-   :width: 60%
-   :alt: CMake Build of flexRIC module
-
-.. code-block:: bash
-
-	make -j`nproc`
-	sudo make install
-
-.. image:: flexric_make_inst.png
-   :width: 60%
-   :alt: Tmux cheatsheet
+We will follow the same steps as in Session 3, except this time we will also run the near-RT RIC and some xApps.
 
 .. _Run_nw_E2:
 
@@ -424,24 +428,17 @@ Deploy 5G Network
 
 Start the Core Network
 ~~~~~~~~~~~~~~~~~~~~~~
-In Terminal 1,
+In ``terminal 1``,
 
 .. code-block:: bash
 
 	cd ~/oai-cn5g
-	sudo docker compose up -d
-	cd ~/
-
-Check if the Core Network is up and running
-
-.. code-block:: bash
-
-	sudo docker ps -a
+	sudo docker compose up
 
 Start the gNB
 ~~~~~~~~~~~~~
 
-In ``Terminal 1``,
+In ``terminal 2``,
 
 .. code-block:: bash
 
@@ -452,15 +449,28 @@ In ``Terminal 1``,
    :width: 60%
    :alt: gNB Initialization
 
+.. note::
+
+	Although the configuration is written for the USRP B210, we have added the ``--rfsim`` argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.
+
+
 Start the UE
 ~~~~~~~~~~~~
 
-In ``terminal 2``,
+In ``terminal 3``,
 
 .. code-block:: bash
 
 	cd ~/oai/cmake_targets/ran_build/build
-	sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --sa --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
+	sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1
+
+.. image:: oai_ue.png
+   :width: 60%
+   :alt: UE Initialization
+
+.. note::
+
+	Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
 
 
 Start the near-RT RIC
@@ -481,11 +491,6 @@ In ``terminal 3``,
    :width: 60%
    :alt: E2 Message reception and RAN function Accept
 
-.. _exch_trf:
-
-Exchange traffic between Network and UE
----------------------------------------
-
 Streaming Traffic with iPerf
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -501,7 +506,12 @@ In ``terminal 5``, run
 
 .. code-block:: bash
 
-	iperf -c 192.168.70.135 -i 1 -b 10M -B <ue_ip>
+	iperf -c 192.168.70.135 -i 1 -b 10M -t 0 -B <ue_ip>
+
+.. note::
+    
+    Replace ``<ue_ip>`` with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2
+
 
 =======================================
 Session 6 - xApp onboarding, deployment
@@ -622,6 +632,14 @@ In a new Terminal, run
 	./build/examples/xApp/c/monitor/xapp_kpm_moni
 
 The output should look like this:
+
+.. image:: xapp_oai_static/kpm.png
+    :width: 60%
+
+On the gNB side:
+
+.. image:: xapp_oai_static/gnbkpm.png
+    :width: 60%
 
 Behind the scenes
 ~~~~~~~~~~~~~~~~~~
@@ -1010,3 +1028,45 @@ Investigating gen_rc_ctrl_hdr and gen_rc_ctrl_msg allows us to see what messages
 
         return dst;
     }
+
+==================================
+Session 7 - Additional Experiments
+==================================
+
+*How can we use SDRs and over-the-air communiation with OAI?*
+
+The USRP B210 software-defined radio is capable of acting as the RF frontend for both the base station and user.
+It connects to a computer over USB 3.
+
+In order to use a USRP SDR with OAI we need to build and install the UHD drivers. First we install any required packages:
+
+.. code-block:: rst
+
+    sudo apt install -y autoconf automake build-essential ccache cmake cpufrequtils doxygen ethtool g++ git inetutils-tools libboost-all-dev libncurses-dev libusb-1.0-0 libusb-1.0-0-dev libusb-dev python3-dev python3-mako python3-numpy python3-requests python3-scipy python3-setuptools python3-ruamel.yaml
+
+Then we can download the USRP driver source code and build it on our system:
+
+.. code-block:: rst
+
+    git clone https://github.com/EttusResearch/uhd.git ~/uhd
+    cd ~/uhd
+    git checkout v4.8.0.0
+    cd host
+    mkdir build
+    cd build
+    cmake ../
+    make -j $(nproc)
+    sudo make install
+    sudo ldconfig
+
+The USRP B210 firmware is not stored on the device itself and is loaded over USB each time the device is plugged in and a program connects to the USRP.
+As such, we need to download the compatible USRP firmware images to our system.
+
+.. code-block:: rst
+
+    sudo uhd_images_downloader
+
+Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.
+
+
+*Documentation written by Nathan Stephenson and supported by NextG Wireless Lab @ NC State and AuresTech. Some resources for this website are based off of or taken from the `Open AI Cellular repository <https://github.com/openaicellular/oaic>`_*
