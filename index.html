@@ -57,11 +57,11 @@
 </li>
 <li><a class="reference internal" href="#session-2-oai-installation">Session 2 - OAI Installation</a><ul>
 <li><a class="reference internal" href="#setup-oai-5g-core-network">Setup OAI 5G Core Network</a><ul>
-<li><a class="reference internal" href="#get-core-network-configuration-files-and-docker-images">Get Core Network Configuration files and docker images</a></li>
 <li><a class="reference internal" href="#test-the-deployment-of-core-network">Test the deployment of Core Network</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#setup-oai-radio-access-network-and-ue">Setup OAI Radio Access Network and UE</a></li>
+<li><a class="reference internal" href="#setup-flexric">Setup FlexRIC</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#session-3-using-rfsimulator-with-oai">Session 3 - Using RFSimulator with OAI</a><ul>
@@ -78,21 +78,14 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#session-4-oai-installation">Session 4 - OAI Installation</a><ul>
-<li><a class="reference internal" href="#setup-ran-e2">Setup OAI Radio Access Network and UE</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#session-5-flexric-installation">Session 5 - FlexRIC Installation</a><ul>
-<li><a class="reference internal" href="#setup-flexric">Setup FlexRIC</a></li>
+<li><a class="reference internal" href="#session-4-oai-installation">Session 4 - OAI Installation</a></li>
+<li><a class="reference internal" href="#session-5-flexric-demonstration">Session 5 - FlexRIC Demonstration</a><ul>
 <li><a class="reference internal" href="#run-nw-e2">Deploy 5G Network</a><ul>
 <li><a class="reference internal" href="#id4">Start the Core Network</a></li>
 <li><a class="reference internal" href="#id5">Start the gNB</a></li>
 <li><a class="reference internal" href="#id6">Start the UE</a></li>
 <li><a class="reference internal" href="#start-the-near-rt-ric">Start the near-RT RIC</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id7">Exchange traffic between Network and UE</a><ul>
-<li><a class="reference internal" href="#id9">Streaming Traffic with iPerf</a></li>
+<li><a class="reference internal" href="#id7">Streaming Traffic with iPerf</a></li>
 </ul>
 </li>
 </ul>
@@ -111,6 +104,7 @@
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#session-7-additional-experiments">Session 7 - Additional Experiments</a></li>
 </ul>
 </div>
         </div>
@@ -137,8 +131,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="session-1-setup-requirements">
-<span id="xappoai"></span><h1>Session 1 - Setup Requirements<a class="headerlink" href="#session-1-setup-requirements" title="Link to this heading"></a></h1>
+  <p id="xappoai"><strong>O-RAN 5G Training: NextG Lab &#64; NC State and AuresTech</strong></p>
+<a class="reference internal image-reference" href="nextgwireless.png"><img alt="nextgwireless.png" src="nextgwireless.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="_images/aurestech.jpg"><img alt="_images/aurestech.jpg" src="_images/aurestech.jpg" style="width: 40%;" /></a>
+<section id="session-1-setup-requirements">
+<h1>Session 1 - Setup Requirements<a class="headerlink" href="#session-1-setup-requirements" title="Link to this heading"></a></h1>
 <section id="system-requirements">
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
 <ul>
@@ -149,30 +146,38 @@
 </ul>
 </div></blockquote>
 </li>
-<li><p>CPU: At least 8 cores</p>
+<li><p>CPU: Ideally 12+ cores</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>We will be running the base station and the user on one system, so ideally more cores is better.</p></li>
+<li><p>We will be running the core network, base station and the user on one system, so more cores is better.</p></li>
+<li><p>The system can technically operate on as low as 4 cores, but network throughput and reliability will be low.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p>RAM: 32GB</p></li>
+<li><p>RAM: 8GB</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Running everything at once takes about 4GB of RAM.</p></li>
+</ul>
+</div></blockquote>
+</li>
 </ul>
 </section>
 <section id="install-dependencies">
 <h2>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>vim<span class="w"> </span>tree<span class="w"> </span>net-tools<span class="w"> </span>libsctp-dev<span class="w"> </span>python3.8<span class="w"> </span>cmake-curses-gui<span class="w"> </span>libpcre2-dev<span class="w"> </span>python-dev<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>libfftw3-dev<span class="w"> </span>libmbedtls-dev<span class="w"> </span>libboost-program-options-dev<span class="w"> </span>libconfig++-dev<span class="w"> </span>libtool<span class="w"> </span>autoconf<span class="w"> </span>python3-pip<span class="w"> </span>curl<span class="w"> </span>bison<span class="w"> </span>flex<span class="w"> </span>iperf<span class="w"> </span>unzip
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>git<span class="w"> </span>vim<span class="w"> </span>tree<span class="w"> </span>net-tools<span class="w"> </span>libsctp-dev<span class="w"> </span>python3<span class="w"> </span>cmake-curses-gui<span class="w"> </span>libpcre2-dev<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>libfftw3-dev<span class="w"> </span>libmbedtls-dev<span class="w"> </span>libboost-program-options-dev<span class="w"> </span>libconfig++-dev<span class="w"> </span>libtool<span class="w"> </span>autoconf<span class="w"> </span>python3-pip<span class="w"> </span>curl<span class="w"> </span>bison<span class="w"> </span>flex<span class="w"> </span>iperf<span class="w"> </span>unzip
 </pre></div>
 </div>
 <section id="install-swig-4-1">
 <h3>Install Swig 4.1<a class="headerlink" href="#install-swig-4-1" title="Link to this heading"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/swig/swig.git
-<span class="nb">cd</span><span class="w"> </span>swig
-git<span class="w"> </span>checkout<span class="w"> </span>release-4.1
-./autogen.sh
-./configure<span class="w"> </span>--prefix<span class="o">=</span>/usr/
-make<span class="w"> </span>-j8
-sudo<span class="w"> </span>make<span class="w"> </span>install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~
+<span class="w">    </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/swig/swig.git
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>swig
+<span class="w">    </span>git<span class="w"> </span>checkout<span class="w"> </span>release-4.1
+<span class="w">    </span>./autogen.sh
+<span class="w">    </span>./configure<span class="w"> </span>--prefix<span class="o">=</span>/usr/
+<span class="w">    </span>make<span class="w"> </span>-j<span class="sb">`</span>nproc<span class="sb">`</span>
+<span class="w">    </span>sudo<span class="w"> </span>make<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
@@ -193,11 +198,11 @@ sudo<span class="w"> </span>install<span class="w"> </span>-m<span class="w"> </
 curl<span class="w"> </span>-fsSL<span class="w"> </span>https://download.docker.com/linux/ubuntu/gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/etc/apt/keyrings/docker.gpg
 sudo<span class="w"> </span>chmod<span class="w"> </span>a+r<span class="w"> </span>/etc/apt/keyrings/docker.gpg
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [arch=&quot;</span><span class="k">$(</span>dpkg<span class="w"> </span>--print-architecture<span class="k">)</span><span class="s2">&quot; signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu &quot;</span><span class="k">$(</span>.<span class="w"> </span>/etc/os-release<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VERSION_CODENAME</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot; stable&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/docker.list<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
-sudo<span class="w"> </span>apt-get<span class="w"> </span>update
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker-buildx-plugin<span class="w"> </span>docker-compose-plugin
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker.io<span class="w"> </span>docker-buildx-plugin<span class="w"> </span>docker-compose-plugin
 </pre></div>
 </div>
-<p>Check docker compose version. The installed version should be <code class="docutils literal notranslate"><span class="pre">v2.29</span></code>.</p>
+<p>Check docker compose version. The installed version should be <code class="docutils literal notranslate"><span class="pre">v2.38.2</span></code>, as of the release of this guide.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>version
 </pre></div>
 </div>
@@ -210,6 +215,16 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 </section>
 <section id="session-2-oai-installation">
 <h1>Session 2 - OAI Installation<a class="headerlink" href="#session-2-oai-installation" title="Link to this heading"></a></h1>
+<p>Before going into the background, we will begin downloading the core network components, which may take some time. Run the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~
+wget<span class="w"> </span>-O<span class="w"> </span>~/oai-cn5g.zip<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path<span class="o">=</span>doc/tutorial_resources/oai-cn5g
+unzip<span class="w"> </span>~/oai-cn5g.zip
+mv<span class="w"> </span>~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g<span class="w"> </span>~/oai-cn5g
+rm<span class="w"> </span>-r<span class="w"> </span>~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g<span class="w"> </span>~/oai-cn5g.zip
+<span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
+sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>pull
+</pre></div>
+</div>
 <p>Refer to the presentation (PIMRC slides 5-10)</p>
 <ul class="simple">
 <li><p>1G-5G timeline</p></li>
@@ -225,7 +240,7 @@ It refers to the concept of a cellular network that is built on open interfaces 
 <li><p>is desirable as an industry standard; for example, the U.S. has awarded over $100M to Open RAN projects this year.</p></li>
 </ul>
 <p>O-RAN is Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
-“<cite>O-RAN ALLIANCE’s mission &lt;https://www.o-ran.org/about&gt;</cite> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
+“<a class="reference external" href="https://www.o-ran.org/about">O-RAN ALLIANCE’s mission</a> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
 <p>Thare are various open-source software solutions built upon the 5G and O-RAN standards.
 The one we will use in this training is OpenAirInterface or OAI, which is a software stack providing the components needed for an operational
 radio access network purely implemented in software.</p>
@@ -243,19 +258,8 @@ radio access network purely implemented in software.</p>
 </ul>
 <section id="setup-oai-5g-core-network">
 <span id="setup-cn"></span><h2>Setup OAI 5G Core Network<a class="headerlink" href="#setup-oai-5g-core-network" title="Link to this heading"></a></h2>
-<p>In this demo, we will employ the Core Network solution provided by Open Air Interface. This solution deploys network functions as docker containers. The CN components can be customized according to experimental requirements by modifying the configuration files. However, for the purposes of this tutorial we retain the default functionality.</p>
-<section id="get-core-network-configuration-files-and-docker-images">
-<h3>Get Core Network Configuration files and docker images<a class="headerlink" href="#get-core-network-configuration-files-and-docker-images" title="Link to this heading"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>
-wget<span class="w"> </span>-O<span class="w"> </span>~/oai-cn5g.zip<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path<span class="o">=</span>doc/tutorial_resources/oai-cn5g
-unzip<span class="w"> </span>~/oai-cn5g.zip
-mv<span class="w"> </span>~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_resources/oai-cn5g<span class="w"> </span>~/oai-cn5g
-rm<span class="w"> </span>-r<span class="w"> </span>~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g<span class="w"> </span>~/oai-cn5g.zip
-<span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
-sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>pull
-</pre></div>
-</div>
-</section>
+<p>In this demo, we will employ the Core Network solution provided by OpenAirInterface. This solution deploys network functions as Docker containers. The CN components can be customized according to experimental requirements by modifying the configuration files. However, for the purposes of this tutorial we retain the default functionality.</p>
+<p>Before the background section we began downloading the Docker images for the core network services.</p>
 <section id="test-the-deployment-of-core-network">
 <h3>Test the deployment of Core Network<a class="headerlink" href="#test-the-deployment-of-core-network" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
@@ -267,7 +271,7 @@ sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/oai_cn_verify.png"><img alt="OAI CN Deployment Verification" src="_images/oai_cn_verify.png" style="width: 60%;" /></a>
-<p>Turn the core network off.</p>
+<p>Turn the core network off. We will start it again later when the rest of the network is ready.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down
 </pre></div>
 </div>
@@ -289,14 +293,13 @@ sudo<span class="w"> </span>./build_oai<span class="w"> </span>-I<span class="w"
 </pre></div>
 </div>
 <p>This installs a couple important packages required by OAI gNB and UE, including libsctp-dev, libtool, SIMDE and most importantly, ASN.1.
-The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.
-See parts of the logs for this step below:</p>
+The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.</p>
 <p>Install nrscope dependencies:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>libforms-dev<span class="w"> </span>libforms-bin
 </pre></div>
 </div>
 <p>Next, we can build the binaries for the OAI base station (gNB) and the OAI user (UE).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/openairinterface5g/cmake_targets
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets
 sudo<span class="w"> </span>./build_oai<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--ninja<span class="w"> </span>--nrUE<span class="w"> </span>--gNB<span class="w"> </span>--build-lib<span class="w"> </span><span class="s2">&quot;nrscope&quot;</span><span class="w"> </span>-C
 </pre></div>
 </div>
@@ -305,43 +308,65 @@ together on one system.</p>
 <p>Note that we compile with the <cite>-w SIMU</cite> option which means that we want to use a simulated radio instead of a physical radio
 such as a USRP software-defined radio. For a USRP we would change this to <cite>-w USRP</cite>.</p>
 </section>
+<section id="setup-flexric">
+<span id="id1"></span><h2>Setup FlexRIC<a class="headerlink" href="#setup-flexric" title="Link to this heading"></a></h2>
+<p>We also need to install the component FlexRIC, which we will use in a later session.</p>
+<p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">beabdd07</span></code> commit.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/flexric.git<span class="w"> </span>~/flexric
+<span class="nb">cd</span><span class="w"> </span>~/flexric
+git<span class="w"> </span>checkout<span class="w"> </span>beabdd07
+</pre></div>
+</div>
+<p>Build the flexRIC module.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>../
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/flexric_cmake.png"><img alt="CMake Build of flexRIC module" src="_images/flexric_cmake.png" style="width: 60%;" /></a>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-j<span class="sb">`</span>nproc<span class="sb">`</span>
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+</section>
 </section>
 <section id="session-3-using-rfsimulator-with-oai">
 <h1>Session 3 - Using RFSimulator with OAI<a class="headerlink" href="#session-3-using-rfsimulator-with-oai" title="Link to this heading"></a></h1>
-<p>5G CN, gNodeB, OAI open-source overview</p>
-<p>How it works end to end with a RF Simulated OAI-gNodeB and OAI NR-UE</p>
 <section id="deploy-5g-network">
 <h2>Deploy 5G Network<a class="headerlink" href="#deploy-5g-network" title="Link to this heading"></a></h2>
 <section id="start-the-core-network">
 <h3>Start the Core Network<a class="headerlink" href="#start-the-core-network" title="Link to this heading"></a></h3>
-<p>In Terminal 1,</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">1</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
-sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
-<span class="nb">cd</span><span class="w"> </span>~/
-</pre></div>
-</div>
-<p>Check if the Core Network is up and running</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up
 </pre></div>
 </div>
 </section>
 <section id="start-the-gnb">
 <h3>Start the gNB<a class="headerlink" href="#start-the-gnb" title="Link to this heading"></a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">1</span></code>,</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
 sudo<span class="w"> </span>./nr-softmodem<span class="w"> </span>-O<span class="w"> </span>../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf<span class="w"> </span>--gNBs.<span class="o">[</span><span class="m">0</span><span class="o">]</span>.min_rxtxtime<span class="w"> </span><span class="m">6</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/gnb_initialization.png"><img alt="gNB Initialization" src="_images/gnb_initialization.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="oai_gnb.png"><img alt="gNB Initialization" src="oai_gnb.png" style="width: 60%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the configuration is written for the USRP B210, we have added the <code class="docutils literal notranslate"><span class="pre">--rfsim</span></code> argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.</p>
+</div>
 </section>
 <section id="start-the-ue">
 <h3>Start the UE<a class="headerlink" href="#start-the-ue" title="Link to this heading"></a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">3</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
-sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
+sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
 </pre></div>
 </div>
-<p>How to perform traffic tests</p>
+<a class="reference internal image-reference" href="oai_ue.png"><img alt="UE Initialization" src="oai_ue.png" style="width: 60%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).</p>
+</div>
 </section>
 </section>
 <section id="exchange-traffic-between-network-and-ue">
@@ -357,6 +382,10 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>ping<span class="w"> </span>&lt;ue_ip&gt;
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;ue_ip&gt;</span></code> with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2</p>
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">ctrl+c</span></code> or <code class="docutils literal notranslate"><span class="pre">ctrl+d</span></code> to stop/exit the ping processes.</p>
 </section>
 <section id="streaming-traffic-with-iperf">
@@ -367,8 +396,8 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-s<span class="w"> </span>-u<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
 </pre></div>
 </div>
-<p>The below command generates UDP traffic for 100 seconds, at the rate of 10Mbps from the Core network. In terminal 5,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-u<span class="w"> </span>-t<span class="w"> </span><span class="m">100</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-c<span class="w"> </span>&lt;ue_ip&gt;
+<p>The below command generates UDP traffic continuously at the rate of 10Mbps from the Core network. In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">5</span></code>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-u<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-c<span class="w"> </span>&lt;ue_ip&gt;
 </pre></div>
 </div>
 <p>Uplink iperf</p>
@@ -377,8 +406,12 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </pre></div>
 </div>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">5</span></code>, run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span><span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;ue_ip&gt;</span></code> with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2</p>
 </div>
 </section>
 </section>
@@ -407,72 +440,45 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </li>
 </ul>
 <p>For more information, refer to the presentation (PIMRC slides 5-39)</p>
-<section id="setup-ran-e2">
-<span id="id1"></span><h2>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-ran-e2" title="Link to this heading"></a></h2>
-<p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">oaic_workshop_2024_v1</span></code> branch.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/openairinterface5G.git<span class="w"> </span>~/oai
-<span class="nb">cd</span><span class="w"> </span>~/oai
-git<span class="w"> </span>checkout<span class="w"> </span>oaic_workshop_2024_v1
-<span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/
-./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--build-e2<span class="w"> </span>--ninja
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="_images/oai_install.png"><img alt="OAI Installation" src="_images/oai_install.png" style="width: 60%;" /></a>
 </section>
-</section>
-<section id="session-5-flexric-installation">
-<h1>Session 5 - FlexRIC Installation<a class="headerlink" href="#session-5-flexric-installation" title="Link to this heading"></a></h1>
-<section id="setup-flexric">
-<span id="id2"></span><h2>Setup FlexRIC<a class="headerlink" href="#setup-flexric" title="Link to this heading"></a></h2>
-<p>Clone the OAI 5G RAN repository and checkout the <code class="docutils literal notranslate"><span class="pre">beabdd07</span></code> commit.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/flexric.git<span class="w"> </span>~/flexric
-<span class="nb">cd</span><span class="w"> </span>~/flexric
-git<span class="w"> </span>checkout<span class="w"> </span>beabdd07
-</pre></div>
-</div>
-<p>Build the flexRIC module.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build
-<span class="nb">cd</span><span class="w"> </span>build
-cmake<span class="w"> </span>../
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="_images/flexric_cmake.png"><img alt="CMake Build of flexRIC module" src="_images/flexric_cmake.png" style="width: 60%;" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-j<span class="sb">`</span>nproc<span class="sb">`</span>
-sudo<span class="w"> </span>make<span class="w"> </span>install
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="_images/flexric_make_inst.png"><img alt="Tmux cheatsheet" src="_images/flexric_make_inst.png" style="width: 60%;" /></a>
-</section>
+<section id="session-5-flexric-demonstration">
+<h1>Session 5 - FlexRIC Demonstration<a class="headerlink" href="#session-5-flexric-demonstration" title="Link to this heading"></a></h1>
+<p>Previously, we installed FlexRIC in the process of building and running OAI.</p>
+<p>We will follow the same steps as in Session 3, except this time we will also run the near-RT RIC and some xApps.</p>
 <section id="run-nw-e2">
 <span id="id3"></span><h2>Deploy 5G Network<a class="headerlink" href="#run-nw-e2" title="Link to this heading"></a></h2>
 <section id="id4">
 <h3>Start the Core Network<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
-<p>In Terminal 1,</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">1</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai-cn5g
-sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
-<span class="nb">cd</span><span class="w"> </span>~/
-</pre></div>
-</div>
-<p>Check if the Core Network is up and running</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up
 </pre></div>
 </div>
 </section>
 <section id="id5">
 <h3>Start the gNB<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">1</span></code>,</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
 sudo<span class="w"> </span>./nr-softmodem<span class="w"> </span>-O<span class="w"> </span>../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf<span class="w"> </span>--gNBs.<span class="o">[</span><span class="m">0</span><span class="o">]</span>.min_rxtxtime<span class="w"> </span><span class="m">6</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/gnb_initialization.png"><img alt="gNB Initialization" src="_images/gnb_initialization.png" style="width: 60%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the configuration is written for the USRP B210, we have added the <code class="docutils literal notranslate"><span class="pre">--rfsim</span></code> argument which enables a simulated RF frontend which streams analog I/Q data over a TCP connection.</p>
+</div>
 </section>
 <section id="id6">
 <h3>Start the UE<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">2</span></code>,</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">3</span></code>,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/ran_build/build
-sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--sa<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
+sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span class="w"> </span><span class="m">106</span><span class="w"> </span>--numerology<span class="w"> </span><span class="m">1</span><span class="w"> </span>--band<span class="w"> </span><span class="m">78</span><span class="w"> </span>-C<span class="w"> </span><span class="m">3619200000</span><span class="w"> </span>--rfsim<span class="w"> </span>--uicc0.imsi<span class="w"> </span><span class="m">001010000000001</span><span class="w"> </span>--rfsimulator.serveraddr<span class="w"> </span><span class="m">127</span>.0.0.1
 </pre></div>
+</div>
+<a class="reference internal image-reference" href="oai_ue.png"><img alt="UE Initialization" src="oai_ue.png" style="width: 60%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).</p>
 </div>
 </section>
 <section id="start-the-near-rt-ric">
@@ -485,19 +491,20 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 <a class="reference internal image-reference" href="_images/near-rt-ric-initialization.png"><img alt="Near-RT RIC Initialization" src="_images/near-rt-ric-initialization.png" style="width: 60%;" /></a>
 <a class="reference internal image-reference" href="_images/e2_near-rt-ric-resp.png"><img alt="E2 Message reception and RAN function Accept" src="_images/e2_near-rt-ric-resp.png" style="width: 60%;" /></a>
 </section>
-</section>
 <section id="id7">
-<span id="id8"></span><h2>Exchange traffic between Network and UE<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
-<section id="id9">
-<h3>Streaming Traffic with iPerf<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<h3>Streaming Traffic with iPerf<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <p>Uplink iperf</p>
 <p>On <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">4</span></code>, initialize the iperf server (metrics are printed every second) for TCP traffic run,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>oai-ext-dn<span class="w"> </span>iperf<span class="w"> </span>-s<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-fk<span class="w"> </span>-B<span class="w"> </span><span class="m">192</span>.168.70.135
 </pre></div>
 </div>
 <p>In <code class="docutils literal notranslate"><span class="pre">terminal</span> <span class="pre">5</span></code>, run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iperf<span class="w"> </span>-c<span class="w"> </span><span class="m">192</span>.168.70.135<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>10M<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span><span class="w"> </span>-B<span class="w"> </span>&lt;ue_ip&gt;
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;ue_ip&gt;</span></code> with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2</p>
 </div>
 </section>
 </section>
@@ -594,6 +601,9 @@ In this implementation <strong>Report Style 4 (Section 7.4.5)</strong> has been 
 </pre></div>
 </div>
 <p>The output should look like this:</p>
+<a class="reference internal image-reference" href="xapp_oai_static/kpm.png"><img alt="xapp_oai_static/kpm.png" src="xapp_oai_static/kpm.png" style="width: 60%;" /></a>
+<p>On the gNB side:</p>
+<a class="reference internal image-reference" href="xapp_oai_static/gnbkpm.png"><img alt="xapp_oai_static/gnbkpm.png" src="xapp_oai_static/gnbkpm.png" style="width: 60%;" /></a>
 </section>
 <section id="behind-the-scenes">
 <h3>Behind the scenes<a class="headerlink" href="#behind-the-scenes" title="Link to this heading"></a></h3>
@@ -969,6 +979,36 @@ In this implementation <strong>Report Style 4 (Section 7.4.5)</strong> has been 
 </div>
 </section>
 </section>
+</section>
+<section id="session-7-additional-experiments">
+<h1>Session 7 - Additional Experiments<a class="headerlink" href="#session-7-additional-experiments" title="Link to this heading"></a></h1>
+<p><em>How can we use SDRs and over-the-air communiation with OAI?</em></p>
+<p>The USRP B210 software-defined radio is capable of acting as the RF frontend for both the base station and user.
+It connects to a computer over USB 3.</p>
+<p>In order to use a USRP SDR with OAI we need to build and install the UHD drivers. First we install any required packages:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span>sudo apt install -y autoconf automake build-essential ccache cmake cpufrequtils doxygen ethtool g++ git inetutils-tools libboost-all-dev libncurses-dev libusb-1.0-0 libusb-1.0-0-dev libusb-dev python3-dev python3-mako python3-numpy python3-requests python3-scipy python3-setuptools python3-ruamel.yaml
+</pre></div>
+</div>
+<p>Then we can download the USRP driver source code and build it on our system:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/EttusResearch/uhd.git ~/uhd
+cd ~/uhd
+git checkout v4.8.0.0
+cd host
+mkdir build
+cd build
+cmake ../
+make -j $(nproc)
+sudo make install
+sudo ldconfig
+</pre></div>
+</div>
+<p>The USRP B210 firmware is not stored on the device itself and is loaded over USB each time the device is plugged in and a program connects to the USRP.
+As such, we need to download the compatible USRP firmware images to our system.</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span>sudo uhd_images_downloader
+</pre></div>
+</div>
+<p>Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.</p>
+<p><em>Documentation written by Nathan Stephenson and supported by NextG Wireless Lab &#64; NC State and AuresTech. Some resources for this website are based off of or taken from the `Open AI Cellular repository &lt;https://github.com/openaicellular/oaic&gt;`_</em></p>
 </section>
 
 
