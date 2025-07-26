@@ -633,12 +633,12 @@ In a new Terminal, run
 
 The output should look like this:
 
-.. image:: xapp_oai_static/kpm.png
+.. image:: xapp_oai_static/oai_kpm.png
     :width: 60%
 
 On the gNB side:
 
-.. image:: xapp_oai_static/gnbkpm.png
+.. image:: xapp_oai_static/oai_gnbkpm.png
     :width: 60%
 
 Behind the scenes
