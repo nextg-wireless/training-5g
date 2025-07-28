@@ -2,7 +2,7 @@
 
 **O-RAN 5G Training: NextG Lab @ NC State and AuresTech**
 
-.. image:: ncstate.png
+.. image:: nextglogo.png
     :width: 40%
 .. image:: aurestech.jpg
     :width: 40%
