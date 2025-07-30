@@ -1,11 +1,18 @@
 .. _xappoai:
 
-**O-RAN 5G Training: NextG Lab @ NC State and AuresTech**
+**O-RAN 5G Training: AuresTech and NextG Lab @ NC State**
+
+.. image:: aurestech.jpg
+    :width: 40%
 
 .. image:: nextglogo.png
     :width: 40%
-.. image:: aurestech.jpg
-    :width: 40%
+
+This site provides information on the 5G and O-RAN course offered by AuresTech in conjunction with NextG Wireless Lab at NC State. This course offers a comprehensive experience that blends in-depth theoretical instruction with practical, hands-on labs to foster innovation in 5G and Open RAN (O-RAN) technologies. It also covers AuresTech tactical 5G concept.
+
+Designed for engineers, researchers, and technology leaders, the course covers core concepts of 5G architecture, the modular design of O-RAN systems,  xApps and rApps. Participants will gain practical experience through guided labs where they configure, deploy, and test real-world 5G components and O-RAN interfaces.
+
+By bridging academic knowledge with real-world application, this program equips participants with the skills and insights needed to drive innovation in secure, open, and interoperable 5G networks.
 
 ==============================
 Session 1 - Setup Requirements
