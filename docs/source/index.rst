@@ -446,9 +446,9 @@ For each cell we can configure the channels for downlink and uplink communicatio
 
 
 
-=======================================
-Session 4 - O-RAN FlexRIC Demonstration
-=======================================
+=========================================
+Session 4+5 - O-RAN FlexRIC Demonstration
+=========================================
 
 What is O-RAN?
 ~~~~~~~~~~~~~~
