@@ -329,10 +329,19 @@ In ``terminal 3``,
 
     Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).
 
+A base station can have multiple cells which are tied to antennas pointing in different directions.
+These cells can operate in different frequencies and traffic can be scheduled differently between them.
+When the user starts, it scans the spectrum for cells that it can connect to. A cell can host multiple users,
+and as such, we prefer to start the base station first and then any users afterwards.
+
+
 .. _exch_trf:
 
 Exchange traffic between Network and UE
 ---------------------------------------
+
+We can exchange both downlink and uplink traffic in our network. Downlink refers to communications from the nodeB to the UE,
+while uplink is communications from UE to nodeB.
 
 Streaming Traffic using Ping
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,9 +403,52 @@ In ``terminal 5``, run
 
     Replace ``<ue_ip>`` with the IP address of the UE which is output in the terminal window. It should be an IP address similar to 10.0.0.2
 
-============================
-Session 4 - OAI Installation
-============================
+
+OAI Configuration File
+----------------------
+
+When starting the base station, we pointed it to the ``gnb.sa.band78.fr1.106PRB.usrpb210.conf`` file. Let us look at some of configurable
+parameters in OAI:
+
+.. code-block:: bash
+
+    plmn_list = ({ mcc = 001; mnc = 01; mnc_length = 2; snssaiList = ({ sst = 1; }) });
+
+A public land mobile network (PLMN) refers to a specific carrier's cellular network in a given country.
+A PLMN ID consists of the mobile country code (MCC) and mobile network code (MNC), and the combination of
+001 and 01 denotes a test network.
+
+.. code-block:: bash
+
+    gNB_ID    =  0xe00;
+    gNB_name  =  "gNB-OAI";
+
+The 22-bit gNB ID should be unique to each base station in a given PLMN.
+
+For each cell we can configure the channels for downlink and uplink communications.
+
+.. code-block:: bash
+
+    # this is 3600 MHz + 43 PRBs@30kHz SCS (same as initial BWP)
+    absoluteFrequencySSB = 641280;
+    dl_frequencyBand     = 78;
+    dl_subcarrierSpacing = 1;
+    dl_carrierBandwidth  = 106;
+
+    ul_frequencyBand     = 78;
+    ul_subcarrierSpacing = 1;
+    ul_carrierBandwidth = 106;
+
+    nrofDownlinkSlots   = 7;
+    nrofDownlinkSymbols = 6;
+    nrofUplinkSlots   = 2;
+    nrofUplinkSymbols = 4;
+
+
+
+=======================================
+Session 4 - O-RAN FlexRIC Demonstration
+=======================================
 
 What is O-RAN?
 ~~~~~~~~~~~~~~
@@ -419,10 +471,6 @@ O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide communi
     * Allow telecom operators to implement custom control logic
 
 For more information, refer to the presentation (PIMRC slides 5-39)
-
-=================================
-Session 5 - FlexRIC Demonstration
-=================================
 
 Previously, we installed FlexRIC in the process of building and running OAI.
 
@@ -1074,6 +1122,16 @@ As such, we need to download the compatible USRP firmware images to our system.
     sudo uhd_images_downloader
 
 Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.
+
+
+*How can we connect multiple users at once in OAI?*
+
+Over the air, multiple users should be able to connect to the base station by default.
+
+However, for RFsimulator, we need to also isolate the users from each other in the system such that their network access isn't shared.
+
+OAI provides a script ``multi_ue.sh`` which handles creating the environments for the users.
+The details can be found in `OAI's documentation <https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/2025.w30/doc/NR_SA_Tutorial_OAI_multi_UE.md?ref_type=tags>`_.
 
 
 *Documentation written by Nathan Stephenson and supported by NextG Wireless Lab @ NC State and AuresTech. Some resources for this website are based off of or taken from the* `Open AI Cellular repository <https://github.com/openaicellular/oaic>`_
