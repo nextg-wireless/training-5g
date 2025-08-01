@@ -76,10 +76,10 @@
 <li><a class="reference internal" href="#streaming-traffic-with-iperf">Streaming Traffic with iPerf</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#oai-configuration-file">OAI Configuration File</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#session-4-oai-installation">Session 4 - OAI Installation</a></li>
-<li><a class="reference internal" href="#session-5-flexric-demonstration">Session 5 - FlexRIC Demonstration</a><ul>
+<li><a class="reference internal" href="#session-4-o-ran-flexric-demonstration">Session 4 - O-RAN FlexRIC Demonstration</a><ul>
 <li><a class="reference internal" href="#run-nw-e2">Deploy 5G Network</a><ul>
 <li><a class="reference internal" href="#id4">Start the Core Network</a></li>
 <li><a class="reference internal" href="#id5">Start the gNB</a></li>
@@ -370,10 +370,16 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 <p class="admonition-title">Note</p>
 <p>Observe that when the user connects, it reports information such as the IP address (10.0.0.2) and the RSRP (Reference Signal Received Power).</p>
 </div>
+<p>A base station can have multiple cells which are tied to antennas pointing in different directions.
+These cells can operate in different frequencies and traffic can be scheduled differently between them.
+When the user starts, it scans the spectrum for cells that it can connect to. A cell can host multiple users,
+and as such, we prefer to start the base station first and then any users afterwards.</p>
 </section>
 </section>
 <section id="exchange-traffic-between-network-and-ue">
 <span id="exch-trf"></span><h2>Exchange traffic between Network and UE<a class="headerlink" href="#exchange-traffic-between-network-and-ue" title="Link to this heading"></a></h2>
+<p>We can exchange both downlink and uplink traffic in our network. Downlink refers to communications from the nodeB to the UE,
+while uplink is communications from UE to nodeB.</p>
 <section id="streaming-traffic-using-ping">
 <h3>Streaming Traffic using Ping<a class="headerlink" href="#streaming-traffic-using-ping" title="Link to this heading"></a></h3>
 <p>For uplink ping - UE to network</p>
@@ -418,9 +424,42 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </div>
 </section>
 </section>
+<section id="oai-configuration-file">
+<h2>OAI Configuration File<a class="headerlink" href="#oai-configuration-file" title="Link to this heading"></a></h2>
+<p>When starting the base station, we pointed it to the <code class="docutils literal notranslate"><span class="pre">gnb.sa.band78.fr1.106PRB.usrpb210.conf</span></code> file. Let us look at some of configurable
+parameters in OAI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">plmn_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">({</span><span class="w"> </span><span class="nv">mcc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">001</span><span class="p">;</span><span class="w"> </span><span class="nv">mnc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">01</span><span class="p">;</span><span class="w"> </span><span class="nv">mnc_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="nv">snssaiList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">({</span><span class="w"> </span><span class="nv">sst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="o">})</span><span class="w"> </span><span class="o">})</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>A public land mobile network (PLMN) refers to a specific carrier’s cellular network in a given country.
+A PLMN ID consists of the mobile country code (MCC) and mobile network code (MNC), and the combination of
+001 and 01 denotes a test network.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">gNB_ID</span><span class="w">    </span><span class="o">=</span><span class="w">  </span>0xe00<span class="p">;</span>
+<span class="nv">gNB_name</span><span class="w">  </span><span class="o">=</span><span class="w">  </span><span class="s2">&quot;gNB-OAI&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The 22-bit gNB ID should be unique to each base station in a given PLMN.</p>
+<p>For each cell we can configure the channels for downlink and uplink communications.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is 3600 MHz + 43 PRBs@30kHz SCS (same as initial BWP)</span>
+<span class="nv">absoluteFrequencySSB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">641280</span><span class="p">;</span>
+<span class="nv">dl_frequencyBand</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="m">78</span><span class="p">;</span>
+<span class="nv">dl_subcarrierSpacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="nv">dl_carrierBandwidth</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="m">106</span><span class="p">;</span>
+
+<span class="nv">ul_frequencyBand</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="m">78</span><span class="p">;</span>
+<span class="nv">ul_subcarrierSpacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="nv">ul_carrierBandwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">106</span><span class="p">;</span>
+
+<span class="nv">nrofDownlinkSlots</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="m">7</span><span class="p">;</span>
+<span class="nv">nrofDownlinkSymbols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="p">;</span>
+<span class="nv">nrofUplinkSlots</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">;</span>
+<span class="nv">nrofUplinkSymbols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">;</span>
+</pre></div>
+</div>
 </section>
-<section id="session-4-oai-installation">
-<h1>Session 4 - OAI Installation<a class="headerlink" href="#session-4-oai-installation" title="Link to this heading"></a></h1>
+</section>
+<section id="session-4-o-ran-flexric-demonstration">
+<h1>Session 4 - O-RAN FlexRIC Demonstration<a class="headerlink" href="#session-4-o-ran-flexric-demonstration" title="Link to this heading"></a></h1>
 <p>O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide community of mobile network operators, vendors, and research &amp; academic institutions.
 “<a class="reference external" href="https://www.o-ran.org/about">O-RAN ALLIANCE’s mission</a> is to re-shape the RAN industry towards more intelligent, open, virtualized and fully interoperable mobile networks.”</p>
 <ul>
@@ -443,9 +482,6 @@ sudo<span class="w"> </span>./nr-uesoftmodem<span class="w"> </span>-r<span clas
 </li>
 </ul>
 <p>For more information, refer to the presentation (PIMRC slides 5-39)</p>
-</section>
-<section id="session-5-flexric-demonstration">
-<h1>Session 5 - FlexRIC Demonstration<a class="headerlink" href="#session-5-flexric-demonstration" title="Link to this heading"></a></h1>
 <p>Previously, we installed FlexRIC in the process of building and running OAI.</p>
 <p>We will follow the same steps as in Session 3, except this time we will also run the near-RT RIC and some xApps.</p>
 <section id="run-nw-e2">
@@ -1011,6 +1047,11 @@ As such, we need to download the compatible USRP firmware images to our system.<
 </pre></div>
 </div>
 <p>Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.</p>
+<p><em>How can we connect multiple users at once in OAI?</em></p>
+<p>Over the air, multiple users should be able to connect to the base station by default.</p>
+<p>However, for RFsimulator, we need to also isolate the users from each other in the system such that their network access isn’t shared.</p>
+<p>OAI provides a script <code class="docutils literal notranslate"><span class="pre">multi_ue.sh</span></code> which handles creating the environments for the users.
+The details can be found in <a class="reference external" href="https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/2025.w30/doc/NR_SA_Tutorial_OAI_multi_UE.md?ref_type=tags">OAI’s documentation</a>.</p>
 <p><em>Documentation written by Nathan Stephenson and supported by NextG Wireless Lab &#64; NC State and AuresTech. Some resources for this website are based off of or taken from the</em> <a class="reference external" href="https://github.com/openaicellular/oaic">Open AI Cellular repository</a></p>
 </section>
 
