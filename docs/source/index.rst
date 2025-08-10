@@ -114,7 +114,7 @@ Before going into the background, we will begin downloading the core network com
 Background
 ==========
 
-Refer to the presentation (PIMRC slides 5-10)
+Refer to the presentation (O-RAN background slides 4-10)
 
 * 1G-5G timeline
 
@@ -429,21 +429,22 @@ For each cell we can configure the channels for downlink and uplink communicatio
 
 .. code-block:: bash
 
-    # this is 3600 MHz + 43 PRBs@30kHz SCS (same as initial BWP)
-    absoluteFrequencySSB = 641280;
-    dl_frequencyBand     = 78;
-    dl_subcarrierSpacing = 1;
-    dl_carrierBandwidth  = 106;
+    # downlink
+    dl_frequencyBand     = 78;  # NR band 78 corresponds to 3300MHz-3800MHz, and is TDD (time division duplex) 
+    dl_subcarrierSpacing = 1;   # index 0-6, index 1 corresponds to 30kHz
+    # subcarrier spacing determines how long an OFDM symbol lasts, higher frequency means shorter symbol -> lower latency
+    dl_carrierBandwidth  = 106; # number of physical resource blocks (transmitted at once across the frequency domain)
 
+    # uplink
     ul_frequencyBand     = 78;
     ul_subcarrierSpacing = 1;
     ul_carrierBandwidth = 106;
 
+    # TDD parameters (for time division duplex bidirectional data is transmitted on the same frequency, alternating over time between downlink and uplink)
     nrofDownlinkSlots   = 7;
     nrofDownlinkSymbols = 6;
     nrofUplinkSlots   = 2;
     nrofUplinkSymbols = 4;
-
 
 
 =========================================
@@ -470,7 +471,7 @@ O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide communi
 
     * Allow telecom operators to implement custom control logic
 
-For more information, refer to the presentation (PIMRC slides 5-39)
+For more information, refer to the presentation (O-RAN background slides 11-37)
 
 Previously, we installed FlexRIC in the process of building and running OAI.
 
