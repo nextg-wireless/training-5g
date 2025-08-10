@@ -228,7 +228,7 @@ rm<span class="w"> </span>-r<span class="w"> </span>~/openairinterface5g-develop
 sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>pull
 </pre></div>
 </div>
-<p>Refer to the presentation (PIMRC slides 5-10)</p>
+<p>Refer to the presentation (O-RAN background slides 4-10)</p>
 <ul class="simple">
 <li><p>1G-5G timeline</p></li>
 <li><p>Reference Cellular Architecture (RAN)</p></li>
@@ -440,16 +440,18 @@ A PLMN ID consists of the mobile country code (MCC) and mobile network code (MNC
 </div>
 <p>The 22-bit gNB ID should be unique to each base station in a given PLMN.</p>
 <p>For each cell we can configure the channels for downlink and uplink communications.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is 3600 MHz + 43 PRBs@30kHz SCS (same as initial BWP)</span>
-<span class="nv">absoluteFrequencySSB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">641280</span><span class="p">;</span>
-<span class="nv">dl_frequencyBand</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="m">78</span><span class="p">;</span>
-<span class="nv">dl_subcarrierSpacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
-<span class="nv">dl_carrierBandwidth</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="m">106</span><span class="p">;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># downlink</span>
+<span class="nv">dl_frequencyBand</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="m">78</span><span class="p">;</span><span class="w">  </span><span class="c1"># NR band 78 corresponds to 3300MHz-3800MHz, and is TDD (time division duplex)</span>
+<span class="nv">dl_subcarrierSpacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w">   </span><span class="c1"># index 0-6, index 1 corresponds to 30kHz</span>
+<span class="c1"># subcarrier spacing determines how long an OFDM symbol lasts, higher frequency means shorter symbol -&gt; lower latency</span>
+<span class="nv">dl_carrierBandwidth</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="m">106</span><span class="p">;</span><span class="w"> </span><span class="c1"># number of physical resource blocks (transmitted at once across the frequency domain)</span>
 
+<span class="c1"># uplink</span>
 <span class="nv">ul_frequencyBand</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="m">78</span><span class="p">;</span>
 <span class="nv">ul_subcarrierSpacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
 <span class="nv">ul_carrierBandwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">106</span><span class="p">;</span>
 
+<span class="c1"># TDD parameters (for time division duplex bidirectional data is transmitted on the same frequency, alternating over time between downlink and uplink)</span>
 <span class="nv">nrofDownlinkSlots</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="m">7</span><span class="p">;</span>
 <span class="nv">nrofDownlinkSymbols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="p">;</span>
 <span class="nv">nrofUplinkSlots</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">;</span>
@@ -481,7 +483,7 @@ A PLMN ID consists of the mobile country code (MCC) and mobile network code (MNC
 </div></blockquote>
 </li>
 </ul>
-<p>For more information, refer to the presentation (PIMRC slides 5-39)</p>
+<p>For more information, refer to the presentation (O-RAN background slides 11-37)</p>
 <p>Previously, we installed FlexRIC in the process of building and running OAI.</p>
 <p>We will follow the same steps as in Session 3, except this time we will also run the near-RT RIC and some xApps.</p>
 <section id="run-nw-e2">
