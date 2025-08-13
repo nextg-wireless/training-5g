@@ -212,9 +212,11 @@ Clone the OAI 5G RAN repository from GitLab, and check out the `develop` branch.
 
 .. code-block:: bash
 
-    git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git ~/oai
+    git clone https://github.com/openaicellular/openairinterface5G.git ~/oai
     cd ~/oai
     git checkout develop
+
+To enable FlexRIC, use the OAIC workshop branch: ``git checkout oaic_workshop_2024_v1``
 
 Install OAI dependencies:
 
@@ -1123,6 +1125,17 @@ As such, we need to download the compatible USRP firmware images to our system.
     sudo uhd_images_downloader
 
 Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.
+
+When running the base station and UE, we need to make some slight changes to the commands:
+
+.. code-block:: rst
+
+    sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --sa -E -continuous-tx
+
+.. code-block:: rst
+
+    sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --uicc0.imsi 001010000000001 --ue-fo-compensation -E
+
 
 
 *How can we connect multiple users at once in OAI?*

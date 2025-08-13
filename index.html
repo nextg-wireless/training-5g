@@ -285,11 +285,12 @@ In that mode, pressing Ctrl+C will stop all containers!</p>
 <section id="setup-oai-radio-access-network-and-ue">
 <span id="setup-ran"></span><h2>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-oai-radio-access-network-and-ue" title="Link to this heading"></a></h2>
 <p>Clone the OAI 5G RAN repository from GitLab, and check out the <cite>develop</cite> branch.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g.git<span class="w"> </span>~/oai
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/openairinterface5G.git<span class="w"> </span>~/oai
 <span class="nb">cd</span><span class="w"> </span>~/oai
 git<span class="w"> </span>checkout<span class="w"> </span>develop
 </pre></div>
 </div>
+<p>To enable FlexRIC, use the OAIC workshop branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">oaic_workshop_2024_v1</span></code></p>
 <p>Install OAI dependencies:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/
 sudo<span class="w"> </span>./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--build-e2<span class="w"> </span>--ninja
@@ -1049,6 +1050,13 @@ As such, we need to download the compatible USRP firmware images to our system.<
 </pre></div>
 </div>
 <p>Note that for a USRP X310 (which connects through Ethernet instead), as long as the device is not corrupted or disconnected during an update, the firmware should persist even when power is off.</p>
+<p>When running the base station and UE, we need to make some slight changes to the commands:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span>sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 6 --sa -E -continuous-tx
+</pre></div>
+</div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span>sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --uicc0.imsi 001010000000001 --ue-fo-compensation -E
+</pre></div>
+</div>
 <p><em>How can we connect multiple users at once in OAI?</em></p>
 <p>Over the air, multiple users should be able to connect to the base station by default.</p>
 <p>However, for RFsimulator, we need to also isolate the users from each other in the system such that their network access isn’t shared.</p>
