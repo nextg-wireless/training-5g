@@ -212,34 +212,26 @@ Clone the OAI 5G RAN repository from GitLab, and check out the `develop` branch.
 
 .. code-block:: bash
 
-    git clone https://github.com/openaicellular/openairinterface5G.git ~/oai
+    git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git ~/oai
     cd ~/oai
     git checkout develop
 
-To enable FlexRIC, use the OAIC workshop branch: ``git checkout oaic_workshop_2024_v1``
-
-Install OAI dependencies:
+Install OAI dependencies and build the binaries for the OAI base station (gNB) and the OAI user (UE).
 
 .. code-block:: bash
 
     cd ~/oai/cmake_targets/
-    sudo ./build_oai -I -w SIMU --gNB --nrUE --build-e2 --ninja
+    sudo ./build_oai -I -w SIMU --gNB --nrUE --ninja
 
 This installs a couple important packages required by OAI gNB and UE, including libsctp-dev, libtool, SIMDE and most importantly, ASN.1.
 The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.
 
-Install nrscope dependencies: 
+.. Next, we can build the binaries for the OAI base station (gNB) and the OAI user (UE).
 
-.. code-block:: bash
+.. .. code-block:: bash
 
-    sudo apt install -y libforms-dev libforms-bin
-
-Next, we can build the binaries for the OAI base station (gNB) and the OAI user (UE).
-
-.. code-block:: bash
-
-    cd ~/oai/cmake_targets 
-    sudo ./build_oai -w SIMU --ninja --nrUE --gNB --build-lib "nrscope" -C 
+..     cd ~/oai/cmake_targets 
+..     sudo ./build_oai -w SIMU --ninja --nrUE --gNB --build-lib "nrscope" -C 
 
 In a real world system, the core, gNB, and UE would be located on separate systems, but for simplicity we will run everything
 together on one system.
@@ -475,7 +467,13 @@ O-RAN is the Open RAN as defined by O-RAN ALLIANCE, which is a worldwide communi
 
 For more information, refer to the presentation (O-RAN background slides 11-37)
 
-Previously, we installed FlexRIC in the process of building and running OAI.
+Previously, we installed FlexRIC in the process of building and running OAI. However, we disabled E2 support in OAI, so we need to recompile
+the base station and user with E2 enabled.
+
+.. code-block:: bash
+
+    cd ~/oai/cmake_targets/
+    sudo ./build_oai -I -w SIMU --gNB --nrUE --build-e2 --ninja
 
 We will follow the same steps as in Session 3, except this time we will also run the near-RT RIC and some xApps.
 
@@ -1135,7 +1133,6 @@ When running the base station and UE, we need to make some slight changes to the
 .. code-block:: rst
 
     sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --uicc0.imsi 001010000000001 --ue-fo-compensation -E
-
 
 
 *How can we connect multiple users at once in OAI?*
