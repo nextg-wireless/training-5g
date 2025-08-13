@@ -285,28 +285,18 @@ In that mode, pressing Ctrl+C will stop all containers!</p>
 <section id="setup-oai-radio-access-network-and-ue">
 <span id="setup-ran"></span><h2>Setup OAI Radio Access Network and UE<a class="headerlink" href="#setup-oai-radio-access-network-and-ue" title="Link to this heading"></a></h2>
 <p>Clone the OAI 5G RAN repository from GitLab, and check out the <cite>develop</cite> branch.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openaicellular/openairinterface5G.git<span class="w"> </span>~/oai
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.eurecom.fr/oai/openairinterface5g.git<span class="w"> </span>~/oai
 <span class="nb">cd</span><span class="w"> </span>~/oai
 git<span class="w"> </span>checkout<span class="w"> </span>develop
 </pre></div>
 </div>
-<p>To enable FlexRIC, use the OAIC workshop branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">oaic_workshop_2024_v1</span></code></p>
-<p>Install OAI dependencies:</p>
+<p>Install OAI dependencies and build the binaries for the OAI base station (gNB) and the OAI user (UE).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/
-sudo<span class="w"> </span>./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--build-e2<span class="w"> </span>--ninja
+sudo<span class="w"> </span>./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--ninja
 </pre></div>
 </div>
 <p>This installs a couple important packages required by OAI gNB and UE, including libsctp-dev, libtool, SIMDE and most importantly, ASN.1.
 The installation logs are not displayed on your terminal, it will be written to file in your log directory, double check to ensure ASN.1 was installed properly.</p>
-<p>Install nrscope dependencies:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>libforms-dev<span class="w"> </span>libforms-bin
-</pre></div>
-</div>
-<p>Next, we can build the binaries for the OAI base station (gNB) and the OAI user (UE).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets
-sudo<span class="w"> </span>./build_oai<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--ninja<span class="w"> </span>--nrUE<span class="w"> </span>--gNB<span class="w"> </span>--build-lib<span class="w"> </span><span class="s2">&quot;nrscope&quot;</span><span class="w"> </span>-C
-</pre></div>
-</div>
 <p>In a real world system, the core, gNB, and UE would be located on separate systems, but for simplicity we will run everything
 together on one system.</p>
 <p>Note that we compile with the <cite>-w SIMU</cite> option which means that we want to use a simulated radio instead of a physical radio
@@ -485,7 +475,12 @@ A PLMN ID consists of the mobile country code (MCC) and mobile network code (MNC
 </li>
 </ul>
 <p>For more information, refer to the presentation (O-RAN background slides 11-37)</p>
-<p>Previously, we installed FlexRIC in the process of building and running OAI.</p>
+<p>Previously, we installed FlexRIC in the process of building and running OAI. However, we disabled E2 support in OAI, so we need to recompile
+the base station and user with E2 enabled.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/oai/cmake_targets/
+sudo<span class="w"> </span>./build_oai<span class="w"> </span>-I<span class="w"> </span>-w<span class="w"> </span>SIMU<span class="w"> </span>--gNB<span class="w"> </span>--nrUE<span class="w"> </span>--build-e2<span class="w"> </span>--ninja
+</pre></div>
+</div>
 <p>We will follow the same steps as in Session 3, except this time we will also run the near-RT RIC and some xApps.</p>
 <section id="run-nw-e2">
 <span id="id3"></span><h2>Deploy 5G Network<a class="headerlink" href="#run-nw-e2" title="Link to this heading"></a></h2>
